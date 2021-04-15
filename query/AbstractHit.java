@@ -1,6 +1,6 @@
 package hust.cs.javacourse.search.query;
 
-import hust.cs.javacourse.search.index.AbstractPosting;
+import hust.cs.javacourse.search.index.Posting;
 import hust.cs.javacourse.search.util.FileUtil;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public abstract class AbstractHit implements Comparable<AbstractHit>{
     /**
      * 命中的单词和对应的Posting键值对，对计算文档得分有用，对于一个查询命中结果，一个term对应的是Posting而不是PostingList
      */
-    protected Map<String, AbstractPosting> termPostingMapping = new TreeMap<>();
+    protected Map<String, Posting> termPostingMapping = new TreeMap<>();
 
     /**
      * 该命中文档的得分，文档的得分通过Sort接口计算.每个文档得分默认值为1.0
@@ -59,7 +59,7 @@ public abstract class AbstractHit implements Comparable<AbstractHit>{
      * @param docPath            ：文档绝对路径
      * @param termPostingMapping ：命中的三元组列表
      */
-    public AbstractHit(int docId, String docPath, Map<String, AbstractPosting> termPostingMapping){
+    public AbstractHit(int docId, String docPath, Map<String, Posting> termPostingMapping){
         this.docId = docId;
         this.docPath = docPath;
         this.termPostingMapping.putAll(termPostingMapping);
@@ -106,7 +106,7 @@ public abstract class AbstractHit implements Comparable<AbstractHit>{
      * 获得命中的单词和对应的Posting键值对
      * @return ：命中的单词和对应的Posting键值对
      */
-    public abstract  Map<String, AbstractPosting> getTermPostingMapping();
+    public abstract  Map<String, Posting> getTermPostingMapping();
 
     /**
      * 获得命中结果的字符串表示, 用于显示搜索结果.

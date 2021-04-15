@@ -1,6 +1,5 @@
 package hust.cs.javacourse.search.index;
 
-import hust.cs.javacourse.search.index.impl.Posting;
 
 import java.io.*;
 import java.util.*;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
  *          FileSerializable：可序列化到文件或从文件反序列化.
  * </pre>
  */
-public class Index implements FileSerializable{
+public class Index implements Serializable{
     /**
      * 内存中的docId和docPath的映射关系, key为docId，value为对应的docPath.
      *      TreeMap可以对键值排序
@@ -26,7 +25,7 @@ public class Index implements FileSerializable{
     /**
      * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<AbstractPosting>对象.
      */
-    protected Map<String, Set<AbstractPosting>> termToPostingListMapping = new HashMap<>();
+    protected Map<String, Set<Posting>> termToPostingListMapping = new HashMap<>();
 
     private static final long serialVersionUID = 667750L;
     @Override
@@ -51,11 +50,11 @@ public class Index implements FileSerializable{
                                 Collectors.toList())
                 ));
         collect.forEach((term,list)->{
-            AbstractPosting posting = new Posting(document.getDocId(),list.size(),list);
-            Set<AbstractPosting> l = termToPostingListMapping.get(term);
+            Posting posting = new Posting(document.getDocId(),list.size(),list);
+            Set<Posting> l = termToPostingListMapping.get(term);
             if(l!=null) l.add(posting);
             else{
-                Set<AbstractPosting> newPostList = new HashSet<>();
+                Set<Posting> newPostList = new HashSet<>();
                 newPostList.add(posting);
                 termToPostingListMapping.put(term,newPostList);
             }
@@ -118,7 +117,7 @@ public class Index implements FileSerializable{
      * @param term : 指定的单词
      * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回null
      */
-    public Set<AbstractPosting> search(String term) {
+    public Set<Posting> search(String term) {
         return termToPostingListMapping.get(term);
     }
 
@@ -147,7 +146,6 @@ public class Index implements FileSerializable{
      *
      * @param out :输出流对象
      */
-    @Override
     public void writeObject(ObjectOutputStream out) {
         try {
             out.writeObject(this);
@@ -162,7 +160,6 @@ public class Index implements FileSerializable{
      *
      * @param in ：输入流对象
      */
-    @Override
     public void readObject(ObjectInputStream in) {
         try {
             Index pre = (Index) in.readObject();

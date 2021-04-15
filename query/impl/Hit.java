@@ -1,6 +1,6 @@
 package hust.cs.javacourse.search.query.impl;
 
-import hust.cs.javacourse.search.index.AbstractPosting;
+import hust.cs.javacourse.search.index.Posting;
 import hust.cs.javacourse.search.query.AbstractHit;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public class Hit extends AbstractHit {
      * @param docPath            ：文档绝对路径
      * @param termPostingMapping ：命中的三元组列表
      */
-    public Hit(int docId, String docPath, Map<String, AbstractPosting> termPostingMapping) {
+    public Hit(int docId, String docPath, Map<String, Posting> termPostingMapping) {
         super(docId, docPath, termPostingMapping);
     }
 
@@ -62,7 +62,7 @@ public class Hit extends AbstractHit {
         this.content = content;
     }
 
-    public Map<String, AbstractPosting> getTermPostingMapping() {
+    public Map<String, Posting> getTermPostingMapping() {
         return termPostingMapping;
     }
 
