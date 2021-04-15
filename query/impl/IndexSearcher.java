@@ -1,7 +1,6 @@
 package hust.cs.javacourse.search.query.impl;
 
 import hust.cs.javacourse.search.index.AbstractPosting;
-import hust.cs.javacourse.search.index.AbstractPostingList;
 import hust.cs.javacourse.search.index.AbstractTerm;
 import hust.cs.javacourse.search.query.AbstractHit;
 import hust.cs.javacourse.search.query.AbstractIndexSearcher;
