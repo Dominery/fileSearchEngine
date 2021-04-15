@@ -23,7 +23,7 @@ public class Index implements Serializable{
     protected Map<Integer, String> docIdToDocPathMapping = new TreeMap<>();
 
     /**
-     * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<AbstractPosting>对象.
+     * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<Posting>对象.
      */
     protected Map<String, Set<Posting>> termToPostingListMapping = new HashMap<>();
 

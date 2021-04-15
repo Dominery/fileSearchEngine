@@ -61,20 +61,22 @@ public class IndexSearcher {
         sorter.sort(hits);
         return hits.toArray(new AbstractHit[1]);
     }
-
+    /*
+    * 一个Term对应的PostList中所有的Posting的docId都是不相同的，
+    * 所以如果想要找出Terms的共同Posting，那么可以通过寻找有同一个docId的Posing，
+    * 如果这些Posting数量与Terms的数量相同，那么这些Posting即为所求。
+    * */
 
     private Stream<Posting> searchPositions(Set<String>queryTerms){
-         return queryTerms.stream()
+        Map<Integer, List<Posting>> docPoses = queryTerms.stream()
                 .map(index::search)
-                .reduce((pre, cur) -> {
-                    Set<Integer> curId = cur.stream()
-                            .map(Posting::getDocId)
-                            .collect(Collectors.toSet());
-                    return pre.stream()
-                            .filter(posting -> curId.contains(posting.getDocId()))
-                            .collect(Collectors.toSet());
-                }).orElse(new HashSet<>())
-                .stream();
+                .filter(Objects::nonNull)
+                .flatMap(Set::stream)
+                .collect(Collectors.groupingBy(Posting::getDocId));
+        return docPoses.values()
+                .stream()
+                .filter(l->l.size()==queryTerms.size())
+                .flatMap(List::stream);
     }
 
     private Stream<Hit> mergePosAndTerms(Stream<Posting>posStream,Set<String> queryTerms){

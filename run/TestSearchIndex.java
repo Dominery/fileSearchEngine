@@ -25,6 +25,7 @@ public class TestSearchIndex {
         HashSet<String> strings = new HashSet<>();
         strings.add("world");
         strings.add("temperatures");
+        strings.add("dddd");
         HashSet<String> strings1 = new HashSet<>();
         strings1.add("google");
         strings1.add("announced");
