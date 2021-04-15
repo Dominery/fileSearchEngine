@@ -13,7 +13,7 @@ import java.util.TreeMap;
  * 实现该接口是因为需要必须比较大小，用于命中结果的排序.
  * </pre>
  */
-public abstract class AbstractHit implements Comparable<AbstractHit>{
+public class Hit implements Comparable<Hit>{
     /**
      * 文档id
      */
@@ -39,7 +39,7 @@ public abstract class AbstractHit implements Comparable<AbstractHit>{
     /**
      * 默认构造函数
      */
-    public AbstractHit(){
+    public Hit(){
 
     }
 
@@ -48,7 +48,7 @@ public abstract class AbstractHit implements Comparable<AbstractHit>{
      * @param docId     : 文档id
      * @param docPath   : 文档绝对路径
      */
-    public AbstractHit(int docId, String docPath){
+    public Hit(int docId, String docPath){
         this.docId = docId;
         this.docPath = docPath;
         this.content = FileUtil.read(docPath);
@@ -60,75 +60,83 @@ public abstract class AbstractHit implements Comparable<AbstractHit>{
      * @param docPath            ：文档绝对路径
      * @param termPostingMapping ：命中的三元组列表
      */
-    public AbstractHit(int docId, String docPath, Map<String, Posting> termPostingMapping){
+    public Hit(int docId, String docPath, Map<String, Posting> termPostingMapping){
         this.docId = docId;
         this.docPath = docPath;
         this.termPostingMapping.putAll(termPostingMapping);
         this.content = FileUtil.read(docPath);
     }
 
-    /**
-     * 获得文档id
-     * @return ： 文档id
-     */
-    public abstract int getDocId();
+    public int getDocId() {
+        return docId;
+    }
 
-    /**
-     * 获得文档绝对路径
-     * @return ：文档绝对路径
-     */
-    public abstract String getDocPath();
+    public void setDocId(int docId) {
+        this.docId = docId;
+    }
 
-    /**
-     * 获得文档内容
-     * @return ： 文档内容
-     */
-    public abstract String getContent();
+    public String getDocPath() {
+        return docPath;
+    }
 
-    /**
-     * 设置文档内容
-     * @param content ：文档内容
-     */
-    public abstract  void setContent(String content);
+    public void setDocPath(String docPath) {
+        this.docPath = docPath;
+    }
 
-    /**
-     * 获得文档得分
-     * @return ： 文档得分
-     */
-    public abstract double getScore();
+    public String getContent() {
+        return content;
+    }
 
-    /**
-     * 设置文档得分
-     * @param score ：文档得分
-     */
-    public abstract  void setScore(double score);
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-    /**
-     * 获得命中的单词和对应的Posting键值对
-     * @return ：命中的单词和对应的Posting键值对
-     */
-    public abstract  Map<String, Posting> getTermPostingMapping();
+    public Map<String, Posting> getTermPostingMapping() {
+        return termPostingMapping;
+    }
 
     /**
      * 获得命中结果的字符串表示, 用于显示搜索结果.
+     *
      * @return : 命中结果的字符串表示
      */
     @Override
-    public abstract  String toString();
+    public String toString() {
+        return "Hit{"+
+                "docId="+docId+
+                ",docPath='"+docPath+"'"+
+                ",content=" +getContent()
+                +"}";
+    }
 
     /**
      * 比较二个命中结果的大小，根据score比较
-     * @param o     ：要比较的名字结果
-     * @return      ：二个命中结果得分的差值
+     *
+     * @param o ：要比较的名字结果
+     * @return ：二个命中结果得分的差值
      */
     @Override
-    public abstract int compareTo(AbstractHit o);
+    public int compareTo(Hit o) {
+        if(o!=null){
+            return Double.compare(score,o.getScore());
+        }
+        return 0;
+    }
+
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractHit that = (AbstractHit) o;
+        Hit that = (Hit) o;
         return docId == that.docId &&
                 Objects.equals(termPostingMapping, that.termPostingMapping);
     }

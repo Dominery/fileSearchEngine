@@ -1,6 +1,6 @@
 package hust.cs.javacourse.search.query.impl;
 
-import hust.cs.javacourse.search.query.AbstractHit;
+import hust.cs.javacourse.search.query.Hit;
 import hust.cs.javacourse.search.query.Sort;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public class NullSort implements Sort {
      * @param hits ：命中结果集合
      */
     @Override
-    public void sort(List<AbstractHit> hits) {
-        hits.sort(AbstractHit::compareTo);
+    public void sort(List<Hit> hits) {
+        hits.sort(Hit::compareTo);
     }
 
     /**
@@ -32,7 +32,7 @@ public class NullSort implements Sort {
      * </pre>
      */
     @Override
-    public double score(AbstractHit hit) {
+    public double score(Hit hit) {
         return hit.getScore();
     }
 }

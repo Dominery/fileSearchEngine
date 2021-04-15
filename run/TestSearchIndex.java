@@ -1,12 +1,11 @@
 package hust.cs.javacourse.search.run;
 
-import hust.cs.javacourse.search.query.AbstractHit;
+import hust.cs.javacourse.search.query.Hit;
 import hust.cs.javacourse.search.query.IndexSearcher;
 import hust.cs.javacourse.search.query.impl.NullSort;
 import hust.cs.javacourse.search.util.Config;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -29,7 +28,7 @@ public class TestSearchIndex {
         HashSet<String> strings1 = new HashSet<>();
         strings1.add("google");
         strings1.add("announced");
-        AbstractHit[] search = searcher.search(Arrays.asList(strings,strings1), new NullSort());
+        Hit[] search = searcher.search(Arrays.asList(strings,strings1), new NullSort());
         System.out.println(Arrays.toString(search));
     }
 }

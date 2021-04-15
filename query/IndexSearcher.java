@@ -2,11 +2,9 @@ package hust.cs.javacourse.search.query;
 
 import hust.cs.javacourse.search.index.Index;
 import hust.cs.javacourse.search.index.Posting;
-import hust.cs.javacourse.search.query.impl.Hit;
 
 import java.io.File;
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,9 +44,9 @@ public class IndexSearcher {
      * @param sorter    ：排序器
      * @return ：命中结果数组
      */
-    public AbstractHit[] search(String queryTerm, Sort sorter) {
+    public Hit[] search(String queryTerm, Sort sorter) {
         Set<Posting> search = index.search(queryTerm);
-        List<AbstractHit> hits = new ArrayList<>();
+        List<Hit> hits = new ArrayList<>();
         for(Posting posting:search){
             HashMap<String, Posting> map = new HashMap<>();
             map.put(queryTerm,posting);
@@ -59,7 +57,7 @@ public class IndexSearcher {
             hits.add(hit);
         }
         sorter.sort(hits);
-        return hits.toArray(new AbstractHit[1]);
+        return hits.toArray(new Hit[1]);
     }
     /*
     * 一个Term对应的PostList中所有的Posting的docId都是不相同的，
@@ -90,13 +88,13 @@ public class IndexSearcher {
     }
 
 
-    public AbstractHit[] search(List<Set<String>>queryTermsList, Sort sorter){
-        Map<Integer, AbstractHit> collect = queryTermsList.stream()
+    public Hit[] search(List<Set<String>>queryTermsList, Sort sorter){
+        Map<Integer, Hit> collect = queryTermsList.stream()
                 .flatMap(queryTerms ->
                         mergePosAndTerms(searchPositions(queryTerms), queryTerms)
                 ).collect(Collectors.toMap(
-                        AbstractHit::getDocId,
-                        Function.<AbstractHit>identity(),
+                        Hit::getDocId,
+                        Function.identity(),
                         (t1, t2) -> {
                     t1.getTermPostingMapping().putAll(t2.getTermPostingMapping());
                     return t1;
@@ -111,8 +109,8 @@ public class IndexSearcher {
                             t1.getTermPostingMapping().putAll(t2.getTermPostingMapping());
                             return t1;}),Optional::get)));
        */
-        Collection<AbstractHit> values = collect.values();
-        return values.toArray(new AbstractHit[1]);
+        Collection<Hit> values = collect.values();
+        return values.toArray(new Hit[1]);
     }
 
 }
