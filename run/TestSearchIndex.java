@@ -2,7 +2,7 @@ package hust.cs.javacourse.search.run;
 
 import hust.cs.javacourse.search.index.AbstractIndex;
 import hust.cs.javacourse.search.index.AbstractIndexBuilder;
-import hust.cs.javacourse.search.index.impl.DocumentBuilder;
+import hust.cs.javacourse.search.index.DocumentBuilder;
 import hust.cs.javacourse.search.index.impl.IndexBuilder;
 import hust.cs.javacourse.search.index.impl.Term;
 import hust.cs.javacourse.search.query.AbstractHit;
@@ -26,7 +26,7 @@ public class TestSearchIndex {
         AbstractIndex index = builder.buildIndex(Config.DOC_DIR);
         AbstractIndexSearcher searcher = new IndexSearcher();
         searcher.open(Config.INDEX_DIR+"index.bat");
-        AbstractHit[] aaas = searcher.search(new Term("gender"), new NullSort());
+        AbstractHit[] aaas = searcher.search(new Term("wearing"), new NullSort());
         System.out.println(Arrays.toString(aaas));
     }
 }

@@ -1,8 +1,5 @@
-package hust.cs.javacourse.search.index.impl;
+package hust.cs.javacourse.search.index;
 
-import hust.cs.javacourse.search.index.Document;
-import hust.cs.javacourse.search.index.AbstractDocumentBuilder;
-import hust.cs.javacourse.search.index.AbstractTermTuple;
 import hust.cs.javacourse.search.parse.AbstractTermTupleStream;
 import hust.cs.javacourse.search.parse.impl.TermTupleFilter;
 import hust.cs.javacourse.search.parse.impl.TermTupleScanner;
@@ -16,10 +13,13 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * @author suyu
- * @create 2021-04-14-16:28
+ * <pre>
+ * AbstractDocumentBuilder是Document构造器的抽象父类.
+ *      Document构造器的功能应该是由解析文本文档得到的TermTupleStream，产生Document对象.
+ * </pre>
  */
-public class DocumentBuilder extends AbstractDocumentBuilder {
+public class DocumentBuilder {
+
     /**
      * <pre>
      * 由解析文本文档得到的TermTupleStream,构造Document对象.
@@ -33,7 +33,7 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
     private final Predicate<String> maxlength = word -> word.length() <= Config.TERM_FILTER_MAXLENGTH;
     private final Predicate<String> stopWords = word -> !Arrays.asList(StopWords.STOP_WORDS).contains(word);
     private final Predicate<String> enChar = word -> word.matches(Config.TERM_FILTER_PATTERN);
-    @Override
+
     public Document build(int docId, String docPath, AbstractTermTupleStream termTupleStream) {
         List<AbstractTermTuple> list = new ArrayList<>();
         AbstractTermTuple term;
@@ -55,7 +55,6 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
      * @return          : Document对象
      * </pre>
      */
-    @Override
     public Document build(int docId, String docPath, File file) {
         BufferedReader br = null;
         Document absDoc = null;

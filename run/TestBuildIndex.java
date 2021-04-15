@@ -1,9 +1,8 @@
 package hust.cs.javacourse.search.run;
 
-import hust.cs.javacourse.search.index.AbstractDocumentBuilder;
+import hust.cs.javacourse.search.index.DocumentBuilder;
 import hust.cs.javacourse.search.index.AbstractIndex;
 import hust.cs.javacourse.search.index.AbstractIndexBuilder;
-import hust.cs.javacourse.search.index.impl.DocumentBuilder;
 import hust.cs.javacourse.search.index.impl.IndexBuilder;
 import hust.cs.javacourse.search.util.Config;
 
@@ -18,7 +17,7 @@ public class TestBuildIndex {
      * @param args : 命令行参数
      */
     public static void main(String[] args){
-        AbstractDocumentBuilder documentBuilder = new DocumentBuilder();
+        DocumentBuilder documentBuilder = new DocumentBuilder();
         AbstractIndexBuilder builder = new IndexBuilder(documentBuilder);
         AbstractIndex index = builder.buildIndex(Config.DOC_DIR);
 //        System.out.println(index);

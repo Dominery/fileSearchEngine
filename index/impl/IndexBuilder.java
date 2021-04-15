@@ -1,6 +1,6 @@
 package hust.cs.javacourse.search.index.impl;
 
-import hust.cs.javacourse.search.index.AbstractDocumentBuilder;
+import hust.cs.javacourse.search.index.DocumentBuilder;
 import hust.cs.javacourse.search.index.AbstractIndex;
 import hust.cs.javacourse.search.index.AbstractIndexBuilder;
 
@@ -11,7 +11,7 @@ import java.io.File;
  * @create 2021-04-14-16:26
  */
 public class IndexBuilder extends AbstractIndexBuilder {
-    public IndexBuilder(AbstractDocumentBuilder docBuilder) {
+    public IndexBuilder(DocumentBuilder docBuilder) {
         super(docBuilder);
     }
 
@@ -26,7 +26,7 @@ public class IndexBuilder extends AbstractIndexBuilder {
     @Override
     public AbstractIndex buildIndex(String rootDirectory) {
         AbstractIndex index = new Index();
-        AbstractDocumentBuilder documentBuilder = new DocumentBuilder();
+        DocumentBuilder documentBuilder = new DocumentBuilder();
         File dir = new File(rootDirectory);
         for(File file:dir.listFiles()){
             if (file.isFile()) {

@@ -10,14 +10,14 @@ public abstract class AbstractIndexBuilder {
     /**
      * 构建索引必须解析文档构建Document对象，因此包含AbstractDocumentBuilder的子类对象
      */
-    protected AbstractDocumentBuilder docBuilder;
+    protected DocumentBuilder docBuilder;
 
     /**
      * docId计数器，每当解析一个文档并写入索引，计数器应该+1
      */
     protected int docId = 0;
 
-    public AbstractIndexBuilder(AbstractDocumentBuilder docBuilder){
+    public AbstractIndexBuilder(DocumentBuilder docBuilder){
         this.docBuilder = docBuilder;
     }
 
