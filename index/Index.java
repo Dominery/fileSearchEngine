@@ -26,7 +26,7 @@ public class Index implements FileSerializable{
     /**
      * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<AbstractPosting>对象.
      */
-    protected Map<String, Set<AbstractPosting>> termToPostingListMapping = new HashMap<String, Set<AbstractPosting>>();
+    protected Map<String, Set<AbstractPosting>> termToPostingListMapping = new HashMap<>();
 
     private static final long serialVersionUID = 667750L;
     @Override
@@ -61,6 +61,11 @@ public class Index implements FileSerializable{
             }
         });
 
+    }
+
+    public void addIndex(Index index){
+        docIdToDocPathMapping.putAll(index.docIdToDocPathMapping);
+        termToPostingListMapping.putAll(index.termToPostingListMapping);
     }
 
     /**
