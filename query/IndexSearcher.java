@@ -6,6 +6,7 @@ import hust.cs.javacourse.search.index.Posting;
 import java.io.File;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,28 +38,6 @@ public class IndexSearcher {
         index.load(new File(indexFile));
     }
 
-    /**
-     * 根据单个检索词进行搜索
-     *
-     * @param queryTerm ：检索词
-     * @param sorter    ：排序器
-     * @return ：命中结果数组
-     */
-    public Hit[] search(String queryTerm, Sort sorter) {
-        Set<Posting> search = index.search(queryTerm);
-        List<Hit> hits = new ArrayList<>();
-        for(Posting posting:search){
-            HashMap<String, Posting> map = new HashMap<>();
-            map.put(queryTerm,posting);
-            Hit hit = new Hit(posting.getDocId(),
-                    index.getDocName(posting.getDocId()),
-                    map);
-            hit.setScore(sorter.score(hit));
-            hits.add(hit);
-        }
-        sorter.sort(hits);
-        return hits.toArray(new Hit[1]);
-    }
     /*
     * 一个Term对应的PostList中所有的Posting的docId都是不相同的，
     * 所以如果想要找出Terms的共同Posting，那么可以通过寻找有同一个docId的Posing，
@@ -88,7 +67,7 @@ public class IndexSearcher {
     }
 
 
-    public Hit[] search(List<Set<String>>queryTermsList, Sort sorter){
+    public Hit[] search(List<Set<String>>queryTermsList, ScoreCalculator sorter){
         Map<Integer, Hit> collect = queryTermsList.stream()
                 .flatMap(queryTerms ->
                         mergePosAndTerms(searchPositions(queryTerms), queryTerms)
@@ -100,17 +79,11 @@ public class IndexSearcher {
                     return t1;
                 }));
 
-        /*        Map<Integer, AbstractHit> collect = queryTermsList.stream()
-                .flatMap(queryTerms ->
-                        mergePosAndTerms(searchPositions(queryTerms), queryTerms)
-                ).collect(Collectors.groupingBy(AbstractHit::getDocId
-                ,Collectors.collectingAndThen(
-                        Collectors.reducing((t1,t2)->{
-                            t1.getTermPostingMapping().putAll(t2.getTermPostingMapping());
-                            return t1;}),Optional::get)));
-       */
-        Collection<Hit> values = collect.values();
-        return values.toArray(new Hit[1]);
+        return collect.values()
+                .stream()
+                .peek(hit -> hit.setScore(sorter.calculate(hit)))
+                .sorted(Comparator.comparingDouble(Hit::getScore))
+                .toArray(Hit[]::new);
     }
 
 }

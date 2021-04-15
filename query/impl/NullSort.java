@@ -1,7 +1,7 @@
 package hust.cs.javacourse.search.query.impl;
 
 import hust.cs.javacourse.search.query.Hit;
-import hust.cs.javacourse.search.query.Sort;
+import hust.cs.javacourse.search.query.ScoreCalculator;
 
 import java.util.List;
 
@@ -9,16 +9,7 @@ import java.util.List;
  * @author suyu
  * @create 2021-04-14-20:57
  */
-public class NullSort implements Sort {
-    /**
-     * 对命中结果集合根据文档得分排序
-     *
-     * @param hits ：命中结果集合
-     */
-    @Override
-    public void sort(List<Hit> hits) {
-        hits.sort(Hit::compareTo);
-    }
+public class NullSort implements ScoreCalculator {
 
     /**
      * <pre>
@@ -32,7 +23,7 @@ public class NullSort implements Sort {
      * </pre>
      */
     @Override
-    public double score(Hit hit) {
+    public double calculate(Hit hit) {
         return hit.getScore();
     }
 }

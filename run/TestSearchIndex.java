@@ -19,8 +19,6 @@ public class TestSearchIndex {
     public static void main(String[] args){
         IndexSearcher searcher = new IndexSearcher();
         searcher.open(Config.INDEX_DIR+"index.bat");
-//        AbstractHit[] aaas = searcher.search("world", new NullSort());
-//        System.out.println(Arrays.toString(aaas));
         HashSet<String> strings = new HashSet<>();
         strings.add("world");
         strings.add("temperatures");

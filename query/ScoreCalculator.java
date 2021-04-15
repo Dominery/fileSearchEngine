@@ -5,12 +5,7 @@ import java.util.List;
 /**
  * Sort定义了对搜索结果排序的接口
  */
-public interface Sort {
-    /**
-     * 对命中结果集合根据文档得分排序
-     * @param hits ：命中结果集合
-     */
-    void sort(List<Hit> hits);
+public interface ScoreCalculator {
 
     /**
      * <pre>
@@ -23,5 +18,5 @@ public interface Sort {
      * @return ：命中文档的得分
      * </pre>
      */
-    double score(Hit hit);
+    double calculate(Hit hit);
 }
