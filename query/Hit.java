@@ -106,7 +106,8 @@ public class Hit implements Comparable<Hit>{
                 "docId="+docId+
                 ",docPath='"+docPath+"'"+
                 ",content=" +getContent()
-                +"}";
+                +",pos="+getTermPostingMapping()+
+                "}";
     }
 
     /**

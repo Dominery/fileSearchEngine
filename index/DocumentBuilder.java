@@ -29,10 +29,15 @@ public class DocumentBuilder {
      * @return ：Document对象
      * </pre>
      */
-    private final Predicate<String> minlength = word -> word.length()> Config.TERM_FILTER_MINLENGTH;
-    private final Predicate<String> maxlength = word -> word.length() <= Config.TERM_FILTER_MAXLENGTH;
-    private final Predicate<String> stopWords = word -> !Arrays.asList(StopWords.STOP_WORDS).contains(word);
-    private final Predicate<String> enChar = word -> word.matches(Config.TERM_FILTER_PATTERN);
+
+
+    private Predicate<String> filter = word->true;
+    public DocumentBuilder() {
+    }
+
+    public DocumentBuilder(Predicate<String> filter) {
+        this.filter = filter;
+    }
 
     public Document build(int docId, String docPath, AbstractTermTupleStream termTupleStream) {
         List<TermTuple> list = new ArrayList<>();
@@ -40,7 +45,6 @@ public class DocumentBuilder {
         while ((term=termTupleStream.next())!=null){
             list.add(term);
         }
-        termTupleStream.close();
         return new Document(docId,docPath,list);
     }
 
@@ -61,8 +65,9 @@ public class DocumentBuilder {
         try {
             br = new BufferedReader(new FileReader(file));
             AbstractTermTupleStream ats = new TermTupleFilter(new TermTupleScanner(br),
-                    minlength.and(maxlength).and(stopWords).and(enChar));
+                    filter);
             absDoc =  build(docId,docPath,ats);
+            ats.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -73,5 +78,9 @@ public class DocumentBuilder {
             }
         }
         return absDoc;
+    }
+
+    public void setFilter(Predicate<String> filter) {
+        this.filter = filter;
     }
 }

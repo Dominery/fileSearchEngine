@@ -6,7 +6,6 @@ import hust.cs.javacourse.search.index.Posting;
 import java.io.File;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,16 +15,13 @@ import java.util.stream.Stream;
  * </pre>
  */
 public class IndexSearcher {
+
     /**
      * 内存中的索引，子类对象被初始化时为空
      */
     protected Index index = new Index();
 
     public IndexSearcher() {
-    }
-
-    public IndexSearcher(Index index) {
-        this.index = index;
     }
 
 
@@ -44,23 +40,21 @@ public class IndexSearcher {
     * 如果这些Posting数量与Terms的数量相同，那么这些Posting即为所求。
     * */
 
-    private Stream<Posting> searchPositions(Set<String>queryTerms){
-        Map<Integer, List<Posting>> docPoses = queryTerms.stream()
-                .map(index::search)
-                .filter(Objects::nonNull)
-                .flatMap(Set::stream)
-                .collect(Collectors.groupingBy(Posting::getDocId));
+    private Stream<Hit> tranform(Set<String>queryTerms){
+        Map<Integer, List<TermPosPair>> docPoses = queryTerms.stream()
+                .flatMap(term->
+                    index.search(term)
+                            .stream()
+                            .map(pos-> new TermPosPair(term, pos))
+                    )
+                .collect(Collectors.groupingBy(TermPosPair::getDocId));
         return docPoses.values()
                 .stream()
                 .filter(l->l.size()==queryTerms.size())
-                .flatMap(List::stream);
-    }
-
-    private Stream<Hit> mergePosAndTerms(Stream<Posting>posStream,Set<String> queryTerms){
-        return posStream
+                .flatMap(List::stream)
                 .map(posting -> {
-                    Map<String, Posting> collect = queryTerms.stream()
-                            .collect(Collectors.toMap(Function.identity(), s -> posting));
+                    Map<String, Posting> collect = new HashMap<>();
+                    collect.put(posting.term,posting.pos);
                     String path = index.getDocName(posting.getDocId());
                     return new Hit(posting.getDocId(), path, collect);
                 });
@@ -69,21 +63,42 @@ public class IndexSearcher {
 
     public Hit[] search(List<Set<String>>queryTermsList, ScoreCalculator sorter){
         Map<Integer, Hit> collect = queryTermsList.stream()
-                .flatMap(queryTerms ->
-                        mergePosAndTerms(searchPositions(queryTerms), queryTerms)
-                ).collect(Collectors.toMap(
+                .flatMap(this::tranform)
+                .collect(Collectors.toMap(
                         Hit::getDocId,
-                        Function.identity(),
-                        (t1, t2) -> {
-                    t1.getTermPostingMapping().putAll(t2.getTermPostingMapping());
-                    return t1;
-                }));
+                        Function.identity(),(h1,h2)->
+                        {
+                            h1.getTermPostingMapping().putAll(h2.getTermPostingMapping());
+                            return h1;
+                        }));
 
         return collect.values()
                 .stream()
                 .peek(hit -> hit.setScore(sorter.calculate(hit)))
                 .sorted(Comparator.comparingDouble(Hit::getScore))
                 .toArray(Hit[]::new);
+    }
+
+    public void setIndex(Index index) {
+        this.index = index;
+    }
+
+    public Index getIndex(){
+        return index;
+    }
+
+
+    private static class TermPosPair{
+        private final String term;
+        private final Posting pos;
+        public TermPosPair(String term, Posting pos){
+            this.term = term;
+            this.pos = pos;
+        }
+        public int getDocId(){
+            return pos.getDocId();
+        }
+
     }
 
 }

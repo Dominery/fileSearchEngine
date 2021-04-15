@@ -59,7 +59,6 @@ public class Index implements Serializable{
                 termToPostingListMapping.put(term,newPostList);
             }
         });
-
     }
 
     public void addIndex(Index index){

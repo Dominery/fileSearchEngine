@@ -2,7 +2,7 @@ package hust.cs.javacourse.search.run;
 
 import hust.cs.javacourse.search.query.Hit;
 import hust.cs.javacourse.search.query.IndexSearcher;
-import hust.cs.javacourse.search.query.impl.NullSort;
+import hust.cs.javacourse.search.query.impl.NullCalculator;
 import hust.cs.javacourse.search.util.Config;
 
 import java.util.Arrays;
@@ -20,13 +20,13 @@ public class TestSearchIndex {
         IndexSearcher searcher = new IndexSearcher();
         searcher.open(Config.INDEX_DIR+"index.bat");
         HashSet<String> strings = new HashSet<>();
-        strings.add("world");
-        strings.add("temperatures");
-        strings.add("dddd");
+        strings.add("email");
+        strings.add("possible");
+        strings.add("google");
         HashSet<String> strings1 = new HashSet<>();
         strings1.add("google");
         strings1.add("announced");
-        Hit[] search = searcher.search(Arrays.asList(strings,strings1), new NullSort());
+        Hit[] search = searcher.search(Arrays.asList(strings1,strings), new NullCalculator());
         System.out.println(Arrays.toString(search));
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
  * @author suyu
  * @create 2021-04-14-20:57
  */
-public class NullSort implements ScoreCalculator {
+public class NullCalculator implements ScoreCalculator {
 
     /**
      * <pre>
