@@ -1,20 +1,33 @@
-package hust.cs.javacourse.search.index.impl;
+package hust.cs.javacourse.search.index;
 
-import hust.cs.javacourse.search.index.*;
+import hust.cs.javacourse.search.index.impl.Posting;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * AbstractIndex的具体实现类
+ * <pre>
+ * AbstractIndex是内存中的倒排索引对象的抽象父类.
+ *      一个倒排索引对象包含了一个文档集合的倒排索引.
+ *      内存中的倒排索引结构为HashMap，key为Term对象，value为对应的PostingList对象.
+ *      另外在AbstractIndex里还定义了从docId和docPath之间的映射关系.
+ *      必须实现下面接口:
+ *          FileSerializable：可序列化到文件或从文件反序列化.
+ * </pre>
  */
-public class Index extends AbstractIndex {
+public class Index implements FileSerializable{
     /**
-     * 返回索引的字符串表示
-     *
-     * @return 索引的字符串表示
+     * 内存中的docId和docPath的映射关系, key为docId，value为对应的docPath.
+     *      TreeMap可以对键值排序
      */
+    protected Map<Integer, String> docIdToDocPathMapping = new TreeMap<>();
+
+    /**
+     * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<AbstractPosting>对象.
+     */
+    protected Map<String, Set<AbstractPosting>> termToPostingListMapping = new HashMap<String, Set<AbstractPosting>>();
+
     private static final long serialVersionUID = 667750L;
     @Override
     public String toString() {
@@ -28,7 +41,6 @@ public class Index extends AbstractIndex {
      *
      * @param document ：文档的AbstractDocument子类型表示
      */
-    @Override
     public void addDocument(Document document) {
         docIdToDocPathMapping.put(document.getDocId(),document.getDocPath());
         List<TermTuple> tuples = document.getTuples();
@@ -57,7 +69,6 @@ public class Index extends AbstractIndex {
      * @param file ：索引文件
      * </pre>
      */
-    @Override
     public void load(File file) {
         ObjectInputStream ois = null;
         try {
@@ -80,7 +91,6 @@ public class Index extends AbstractIndex {
      * @param file ：写入的目标索引文件
      * </pre>
      */
-    @Override
     public void save(File file) {
         ObjectOutputStream oos = null;
         try {
@@ -103,7 +113,6 @@ public class Index extends AbstractIndex {
      * @param term : 指定的单词
      * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回null
      */
-    @Override
     public Set<AbstractPosting> search(String term) {
         return termToPostingListMapping.get(term);
     }
@@ -113,7 +122,6 @@ public class Index extends AbstractIndex {
      *
      * @return ：索引中Term列表
      */
-    @Override
     public Set<String> getDictionary() {
         return termToPostingListMapping.keySet();
     }
@@ -125,7 +133,6 @@ public class Index extends AbstractIndex {
      * @param docId ：文档id
      * @return : 对应文档的完全路径名
      */
-    @Override
     public String getDocName(int docId) {
         return docIdToDocPathMapping.get(docId);
     }
@@ -160,5 +167,4 @@ public class Index extends AbstractIndex {
             exception.printStackTrace();
         }
     }
-
 }

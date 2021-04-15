@@ -1,6 +1,6 @@
 package hust.cs.javacourse.search.run;
 
-import hust.cs.javacourse.search.index.AbstractIndex;
+import hust.cs.javacourse.search.index.Index;
 import hust.cs.javacourse.search.index.AbstractIndexBuilder;
 import hust.cs.javacourse.search.index.DocumentBuilder;
 import hust.cs.javacourse.search.index.impl.IndexBuilder;
@@ -22,7 +22,7 @@ public class TestSearchIndex {
      */
     public static void main(String[] args){
         AbstractIndexBuilder builder = new IndexBuilder(new DocumentBuilder());
-        AbstractIndex index = builder.buildIndex(Config.DOC_DIR);
+        Index index = builder.buildIndex(Config.DOC_DIR);
         AbstractIndexSearcher searcher = new IndexSearcher();
         searcher.open(Config.INDEX_DIR+"index.bat");
         AbstractHit[] aaas = searcher.search("wearing", new NullSort());

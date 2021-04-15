@@ -29,6 +29,6 @@ public abstract class AbstractIndexBuilder {
      * @return ：构建好的索引
      * </pre>
      */
-    public abstract AbstractIndex buildIndex(String rootDirectory);
+    public abstract Index buildIndex(String rootDirectory);
 
 }
