@@ -1,7 +1,6 @@
 package hust.cs.javacourse.search.parse.impl;
 
 import hust.cs.javacourse.search.index.TermTuple;
-import hust.cs.javacourse.search.index.impl.Term;
 import hust.cs.javacourse.search.parse.AbstractTermTupleScanner;
 import hust.cs.javacourse.search.util.Config;
 
@@ -52,7 +51,7 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
         }
         String word = cache.get(index++);
         if(Config.IGNORE_CASE)word = word.toLowerCase();
-        return new TermTuple(new Term(word),++currentPos);
+        return new TermTuple(word,++currentPos);
 
     }
 

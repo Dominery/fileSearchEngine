@@ -28,7 +28,7 @@ public class TermTupleFilter extends AbstractTermTupleFilter {
     public TermTuple next() {
         TermTuple next;
         while ((next=input.next())!=null){
-            String word = next.term.getContent();
+            String word = next.term;
             if(p.test(word)){
                 return next;
             }

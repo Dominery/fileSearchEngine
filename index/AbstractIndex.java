@@ -26,7 +26,7 @@ public abstract class AbstractIndex implements FileSerializable{
     /**
      * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<AbstractPosting>对象.
      */
-    protected  Map<AbstractTerm, Set<AbstractPosting>> termToPostingListMapping = new HashMap<>();
+    protected Map<String, Set<AbstractPosting>> termToPostingListMapping = new HashMap<String, Set<AbstractPosting>>();
 
     /**
      *  缺省构造函数,构建空的索引
@@ -69,13 +69,13 @@ public abstract class AbstractIndex implements FileSerializable{
      * @param term : 指定的单词
      * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回null
      */
-    public abstract Set<AbstractPosting> search(AbstractTerm term);
+    public abstract Set<AbstractPosting> search(String term);
 
     /**
      * 返回索引的字典.字典为索引里所有单词的并集
      * @return ：索引中Term列表
      */
-    public abstract Set<AbstractTerm> getDictionary();
+    public abstract Set<String> getDictionary();
 
 
 

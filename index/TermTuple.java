@@ -1,9 +1,5 @@
 package hust.cs.javacourse.search.index;
 
-import hust.cs.javacourse.search.index.impl.Term;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,7 +15,7 @@ public  class TermTuple {
     /**
      * 单词
      */
-    public AbstractTerm term;
+    public String term;
     /**
      * 出现次数，始终为1
      */
@@ -29,7 +25,7 @@ public  class TermTuple {
      */
     public int curPos ;
 
-    public TermTuple(AbstractTerm term, int curPos) {
+    public TermTuple(String term, int curPos) {
         this.term = term;
         this.curPos = curPos;
     }

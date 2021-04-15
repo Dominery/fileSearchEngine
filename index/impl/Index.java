@@ -32,7 +32,7 @@ public class Index extends AbstractIndex {
     public void addDocument(Document document) {
         docIdToDocPathMapping.put(document.getDocId(),document.getDocPath());
         List<TermTuple> tuples = document.getTuples();
-        Map<AbstractTerm, List<Integer>> collect = tuples.stream()
+        Map<String, List<Integer>> collect = tuples.stream()
                 .collect(Collectors.groupingBy(
                         absTermTuple -> absTermTuple.term,
                         Collectors.mapping(absTermTuple -> absTermTuple.curPos,
@@ -104,7 +104,7 @@ public class Index extends AbstractIndex {
      * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回null
      */
     @Override
-    public Set<AbstractPosting> search(AbstractTerm term) {
+    public Set<AbstractPosting> search(String term) {
         return termToPostingListMapping.get(term);
     }
 
@@ -114,7 +114,7 @@ public class Index extends AbstractIndex {
      * @return ：索引中Term列表
      */
     @Override
-    public Set<AbstractTerm> getDictionary() {
+    public Set<String> getDictionary() {
         return termToPostingListMapping.keySet();
     }
 

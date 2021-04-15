@@ -1,7 +1,6 @@
 package hust.cs.javacourse.search.query;
 
 import hust.cs.javacourse.search.index.AbstractIndex;
-import hust.cs.javacourse.search.index.AbstractTerm;
 import hust.cs.javacourse.search.index.impl.Index;
 
 /**
@@ -41,7 +40,7 @@ public abstract class AbstractIndexSearcher {
      * @param sorter ：排序器
      * @return ：命中结果数组
      */
-    public abstract AbstractHit[] search(AbstractTerm queryTerm, Sort sorter);
+    public abstract AbstractHit[] search(String queryTerm, Sort sorter);
 
     /**
      *
@@ -52,6 +51,6 @@ public abstract class AbstractIndexSearcher {
      * @param combine ：   多个检索词的逻辑组合方式
      * @return ：命中结果数组
      */
-    public abstract AbstractHit[] search(AbstractTerm queryTerm1, AbstractTerm queryTerm2, Sort sorter, LogicalCombination combine);
+    public abstract AbstractHit[] search(String queryTerm1, String queryTerm2, Sort sorter, LogicalCombination combine);
 
 }

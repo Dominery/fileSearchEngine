@@ -1,7 +1,6 @@
 package hust.cs.javacourse.search.query.impl;
 
 import hust.cs.javacourse.search.index.AbstractPosting;
-import hust.cs.javacourse.search.index.AbstractTerm;
 import hust.cs.javacourse.search.query.AbstractHit;
 import hust.cs.javacourse.search.query.AbstractIndexSearcher;
 import hust.cs.javacourse.search.query.Sort;
@@ -36,11 +35,11 @@ public class IndexSearcher extends AbstractIndexSearcher {
      * @return ：命中结果数组
      */
     @Override
-    public AbstractHit[] search(AbstractTerm queryTerm, Sort sorter) {
+    public AbstractHit[] search(String queryTerm, Sort sorter) {
         Set<AbstractPosting> search = index.search(queryTerm);
         List<AbstractHit> hits = new ArrayList<>();
         for(AbstractPosting posting:search){
-            HashMap<AbstractTerm, AbstractPosting> map = new HashMap<>();
+            HashMap<String, AbstractPosting> map = new HashMap<>();
             map.put(queryTerm,posting);
             Hit hit = new Hit(posting.getDocId(),
                     index.getDocName(posting.getDocId()),
@@ -62,7 +61,7 @@ public class IndexSearcher extends AbstractIndexSearcher {
      * @return ：命中结果数组
      */
     @Override
-    public AbstractHit[] search(AbstractTerm queryTerm1, AbstractTerm queryTerm2, Sort sorter, LogicalCombination combine) {
+    public AbstractHit[] search(String queryTerm1, String queryTerm2, Sort sorter, LogicalCombination combine) {
         return new AbstractHit[0];
     }
 }
