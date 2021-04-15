@@ -1,5 +1,6 @@
 package hust.cs.javacourse.search.index;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.io.File;
 import java.util.Set;
@@ -23,9 +24,9 @@ public abstract class AbstractIndex implements FileSerializable{
     protected Map<Integer, String> docIdToDocPathMapping = new TreeMap<>();
 
     /**
-     * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的PostingList对象.
+     * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<AbstractPosting>对象.
      */
-    protected  Map<AbstractTerm, AbstractPostingList> termToPostingListMapping = new TreeMap<AbstractTerm, AbstractPostingList>();
+    protected  Map<AbstractTerm, Set<AbstractPosting>> termToPostingListMapping = new HashMap<>();
 
     /**
      *  缺省构造函数,构建空的索引
@@ -68,7 +69,7 @@ public abstract class AbstractIndex implements FileSerializable{
      * @param term : 指定的单词
      * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回null
      */
-    public abstract AbstractPostingList search(AbstractTerm term);
+    public abstract Set<AbstractPosting> search(AbstractTerm term);
 
     /**
      * 返回索引的字典.字典为索引里所有单词的并集
@@ -76,15 +77,7 @@ public abstract class AbstractIndex implements FileSerializable{
      */
     public abstract Set<AbstractTerm> getDictionary();
 
-    /**
-     * <pre>
-     * 对索引进行优化，包括：
-     *      对索引里每个单词的PostingList按docId从小到大排序
-     *      同时对每个Posting里的positions从小到大排序
-     * 在内存中把索引构建完后执行该方法
-     * </pre>
-     */
-    public abstract void optimize();
+
 
     /**
      * 根据docId获得对应文档的完全路径名

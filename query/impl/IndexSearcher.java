@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author suyu
@@ -37,11 +38,10 @@ public class IndexSearcher extends AbstractIndexSearcher {
      */
     @Override
     public AbstractHit[] search(AbstractTerm queryTerm, Sort sorter) {
-        AbstractPostingList search = index.search(queryTerm);
+        Set<AbstractPosting> search = index.search(queryTerm);
         List<AbstractHit> hits = new ArrayList<>();
-        for (int i = 0;search!=null && i < search.size(); i++) {
+        for(AbstractPosting posting:search){
             HashMap<AbstractTerm, AbstractPosting> map = new HashMap<>();
-            AbstractPosting posting = search.get(i);
             map.put(queryTerm,posting);
             Hit hit = new Hit(posting.getDocId(),
                     index.getDocName(posting.getDocId()),

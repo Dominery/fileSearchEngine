@@ -3,10 +3,7 @@ package hust.cs.javacourse.search.index.impl;
 import hust.cs.javacourse.search.index.*;
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,10 +40,10 @@ public class Index extends AbstractIndex {
                 ));
         collect.forEach((term,list)->{
             AbstractPosting posting = new Posting(document.getDocId(),list.size(),list);
-            AbstractPostingList l = termToPostingListMapping.get(term);
+            Set<AbstractPosting> l = termToPostingListMapping.get(term);
             if(l!=null) l.add(posting);
             else{
-                PostingList newPostList = new PostingList();
+                Set<AbstractPosting> newPostList = new HashSet<>();
                 newPostList.add(posting);
                 termToPostingListMapping.put(term,newPostList);
             }
@@ -66,7 +63,6 @@ public class Index extends AbstractIndex {
         try {
             ois = new ObjectInputStream(new FileInputStream(file));
             readObject(ois);
-            optimize();
         } catch (IOException exception) {
             exception.printStackTrace();
         } finally {
@@ -108,7 +104,7 @@ public class Index extends AbstractIndex {
      * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回null
      */
     @Override
-    public AbstractPostingList search(AbstractTerm term) {
+    public Set<AbstractPosting> search(AbstractTerm term) {
         return termToPostingListMapping.get(term);
     }
 
@@ -122,24 +118,6 @@ public class Index extends AbstractIndex {
         return termToPostingListMapping.keySet();
     }
 
-    /**
-     * <pre>
-     * 对索引进行优化，包括：
-     *      对索引里每个单词的PostingList按docId从小到大排序
-     *      同时对每个Posting里的positions从小到大排序
-     * 在内存中把索引构建完后执行该方法
-     * </pre>
-     */
-    @Override
-    public void optimize() {
-        for (Map.Entry<AbstractTerm, AbstractPostingList> next : termToPostingListMapping.entrySet()) {
-            AbstractPostingList value = next.getValue();
-            value.sort();
-            for (int i = 0; i < value.size(); i++) {
-                value.get(i).getPositions().sort(Integer::compareTo);
-            }
-        }
-    }
 
     /**
      * 根据docId获得对应文档的完全路径名
