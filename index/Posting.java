@@ -4,6 +4,7 @@ package hust.cs.javacourse.search.index;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <pre>
@@ -59,6 +60,11 @@ public class Posting implements Comparable<Posting>, Serializable {
         Posting posting = (Posting) obj;
         return docId==posting.getDocId()&&freq==posting.getFreq()&&
                 positions.equals(posting.getPositions());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(docId, freq, positions);
     }
 
     @Override

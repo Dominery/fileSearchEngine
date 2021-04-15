@@ -4,6 +4,7 @@ import hust.cs.javacourse.search.index.Posting;
 import hust.cs.javacourse.search.util.FileUtil;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -123,5 +124,17 @@ public abstract class AbstractHit implements Comparable<AbstractHit>{
     @Override
     public abstract int compareTo(AbstractHit o);
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractHit that = (AbstractHit) o;
+        return docId == that.docId &&
+                Objects.equals(termPostingMapping, that.termPostingMapping);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(docId, termPostingMapping);
+    }
 }
