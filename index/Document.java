@@ -1,6 +1,5 @@
 package hust.cs.javacourse.search.index;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,9 +23,9 @@ public class Document {
     /**
      * 文档包含的三元组列表
      */
-    private List<AbstractTermTuple> tuples;
+    private List<TermTuple> tuples;
 
-    public Document(int docId, String docPath, List<AbstractTermTuple> tuples) {
+    public Document(int docId, String docPath, List<TermTuple> tuples) {
         this.docId = docId;
         this.docPath = docPath;
         this.tuples = tuples;
@@ -49,11 +48,11 @@ public class Document {
         this.docPath = docPath;
     }
 
-    public List<AbstractTermTuple> getTuples() {
+    public List<TermTuple> getTuples() {
         return tuples;
     }
 
-    public void setTuples(List<AbstractTermTuple> tuples) {
+    public void setTuples(List<TermTuple> tuples) {
         this.tuples = tuples;
     }
 

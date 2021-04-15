@@ -31,7 +31,7 @@ public class Index extends AbstractIndex {
     @Override
     public void addDocument(Document document) {
         docIdToDocPathMapping.put(document.getDocId(),document.getDocPath());
-        List<AbstractTermTuple> tuples = document.getTuples();
+        List<TermTuple> tuples = document.getTuples();
         Map<AbstractTerm, List<Integer>> collect = tuples.stream()
                 .collect(Collectors.groupingBy(
                         absTermTuple -> absTermTuple.term,

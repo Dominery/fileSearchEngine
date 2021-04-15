@@ -1,16 +1,10 @@
 package hust.cs.javacourse.search.parse.impl;
 
-import hust.cs.javacourse.search.index.AbstractTermTuple;
+import hust.cs.javacourse.search.index.TermTuple;
 import hust.cs.javacourse.search.parse.AbstractTermTupleFilter;
 import hust.cs.javacourse.search.parse.AbstractTermTupleStream;
-import hust.cs.javacourse.search.util.Config;
-import hust.cs.javacourse.search.util.StopWords;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author suyu
@@ -31,8 +25,8 @@ public class TermTupleFilter extends AbstractTermTupleFilter {
         p = pre;
     }
     @Override
-    public AbstractTermTuple next() {
-        AbstractTermTuple next;
+    public TermTuple next() {
+        TermTuple next;
         while ((next=input.next())!=null){
             String word = next.term.getContent();
             if(p.test(word)){

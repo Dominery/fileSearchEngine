@@ -1,15 +1,13 @@
 package hust.cs.javacourse.search.parse.impl;
 
-import hust.cs.javacourse.search.index.AbstractTermTuple;
+import hust.cs.javacourse.search.index.TermTuple;
 import hust.cs.javacourse.search.index.impl.Term;
-import hust.cs.javacourse.search.index.impl.TermTuple;
 import hust.cs.javacourse.search.parse.AbstractTermTupleScanner;
 import hust.cs.javacourse.search.util.Config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +27,7 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
     }
 
     @Override
-    public AbstractTermTuple next() {
+    public TermTuple next() {
         if(index==cache.size()){
             cache.clear();
             String s = null;

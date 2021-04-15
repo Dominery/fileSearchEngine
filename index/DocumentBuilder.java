@@ -35,8 +35,8 @@ public class DocumentBuilder {
     private final Predicate<String> enChar = word -> word.matches(Config.TERM_FILTER_PATTERN);
 
     public Document build(int docId, String docPath, AbstractTermTupleStream termTupleStream) {
-        List<AbstractTermTuple> list = new ArrayList<>();
-        AbstractTermTuple term;
+        List<TermTuple> list = new ArrayList<>();
+        TermTuple term;
         while ((term=termTupleStream.next())!=null){
             list.add(term);
         }

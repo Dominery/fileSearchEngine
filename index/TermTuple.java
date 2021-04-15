@@ -4,6 +4,7 @@ import hust.cs.javacourse.search.index.impl.Term;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <pre>
@@ -14,7 +15,7 @@ import java.util.List;
  *
  *
  */
-public abstract class AbstractTermTuple {
+public  class TermTuple {
     /**
      * 单词
      */
@@ -28,19 +29,27 @@ public abstract class AbstractTermTuple {
      */
     public int curPos ;
 
+    public TermTuple(AbstractTerm term, int curPos) {
+        this.term = term;
+        this.curPos = curPos;
+    }
+
     /**
      * 判断二个三元组内容是否相同
-     * @param obj ：要比较的另外一个三元组
+     * @param o ：要比较的另外一个三元组
      * @return 如果内容相等（三个属性内容都相等）返回true，否则返回false
      */
-    @Override
-    public abstract boolean equals(Object obj);
 
-    /**
-     * 获得三元组的字符串表示
-     * @return ： 三元组的字符串表示
-     */
     @Override
-    public abstract String toString();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TermTuple termTuple = (TermTuple) o;
+        return curPos == termTuple.curPos && Objects.equals(term, termTuple.term);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(term, freq, curPos);
+    }
 }
