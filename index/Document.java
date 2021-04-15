@@ -1,28 +1,37 @@
-package hust.cs.javacourse.search.index.impl;
-
-import hust.cs.javacourse.search.index.AbstractDocument;
-import hust.cs.javacourse.search.index.AbstractTermTuple;
+package hust.cs.javacourse.search.index;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author suyu
- * @create 2021-04-14-15:57
+ *<pre>
+ *     Document是文档对象.
+ *          文档对象是解析一个文本文件得到结果，文档对象里面包含：
+ *              文档id.
+ *              文档的绝对路径.
+ *              文档包含的三元组对象列表，一个三元组对象是抽象类AbstractTermTuple的子类实例
+ *</pre>
  */
-public class Document extends AbstractDocument {
-
-
-    public Document() {
-    }
-
-    public Document(int docId, String docPath) {
-        super(docId, docPath);
-    }
+public class Document {
+    /**
+     * 文档id
+     */
+    private int docId;
+    /**
+     * 文档绝对路径
+     */
+    private String docPath;
+    /**
+     * 文档包含的三元组列表
+     */
+    private List<AbstractTermTuple> tuples;
 
     public Document(int docId, String docPath, List<AbstractTermTuple> tuples) {
-        super(docId, docPath, tuples);
+        this.docId = docId;
+        this.docPath = docPath;
+        this.tuples = tuples;
     }
+
 
     public int getDocId() {
         return docId;
@@ -44,26 +53,6 @@ public class Document extends AbstractDocument {
         return tuples;
     }
 
-    @Override
-    public void addTuple(AbstractTermTuple tuple) {
-        tuples.add(tuple);
-    }
-
-    @Override
-    public boolean contains(AbstractTermTuple tuple) {
-        return tuples.contains(tuple);
-    }
-
-    @Override
-    public AbstractTermTuple getTuple(int index) {
-        return tuples.get(index);
-    }
-
-    @Override
-    public int getTupleSize() {
-        return tuples.size();
-    }
-
     public void setTuples(List<AbstractTermTuple> tuples) {
         this.tuples = tuples;
     }
@@ -76,4 +65,5 @@ public class Document extends AbstractDocument {
                 ", tuples=" + tuples +
                 '}';
     }
+
 }

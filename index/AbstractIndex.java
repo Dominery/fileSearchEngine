@@ -46,7 +46,7 @@ public abstract class AbstractIndex implements FileSerializable{
      * 添加文档到索引，更新索引内部的HashMap
      * @param document ：文档的AbstractDocument子类型表示
      */
-    public abstract void addDocument(AbstractDocument document);
+    public abstract void addDocument(Document document);
 
     /**
      * <pre>

@@ -29,7 +29,7 @@ public class Index extends AbstractIndex {
      * @param document ：文档的AbstractDocument子类型表示
      */
     @Override
-    public void addDocument(AbstractDocument document) {
+    public void addDocument(Document document) {
         docIdToDocPathMapping.put(document.getDocId(),document.getDocPath());
         List<AbstractTermTuple> tuples = document.getTuples();
         Map<AbstractTerm, List<Integer>> collect = tuples.stream()

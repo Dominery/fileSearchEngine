@@ -1,6 +1,6 @@
 package hust.cs.javacourse.search.index.impl;
 
-import hust.cs.javacourse.search.index.AbstractDocument;
+import hust.cs.javacourse.search.index.Document;
 import hust.cs.javacourse.search.index.AbstractDocumentBuilder;
 import hust.cs.javacourse.search.index.AbstractTermTuple;
 import hust.cs.javacourse.search.parse.AbstractTermTupleStream;
@@ -34,7 +34,7 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
     private final Predicate<String> stopWords = word -> !Arrays.asList(StopWords.STOP_WORDS).contains(word);
     private final Predicate<String> enChar = word -> word.matches(Config.TERM_FILTER_PATTERN);
     @Override
-    public AbstractDocument build(int docId, String docPath, AbstractTermTupleStream termTupleStream) {
+    public Document build(int docId, String docPath, AbstractTermTupleStream termTupleStream) {
         List<AbstractTermTuple> list = new ArrayList<>();
         AbstractTermTuple term;
         while ((term=termTupleStream.next())!=null){
@@ -56,9 +56,9 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
      * </pre>
      */
     @Override
-    public AbstractDocument build(int docId, String docPath, File file) {
+    public Document build(int docId, String docPath, File file) {
         BufferedReader br = null;
-        AbstractDocument absDoc = null;
+        Document absDoc = null;
         try {
             br = new BufferedReader(new FileReader(file));
             AbstractTermTupleStream ats = new TermTupleFilter(new TermTupleScanner(br),

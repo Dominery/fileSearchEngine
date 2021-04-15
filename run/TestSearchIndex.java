@@ -26,7 +26,7 @@ public class TestSearchIndex {
         AbstractIndex index = builder.buildIndex(Config.DOC_DIR);
         AbstractIndexSearcher searcher = new IndexSearcher();
         searcher.open(Config.INDEX_DIR+"index.bat");
-        AbstractHit[] aaas = searcher.search(new Term("google"), new NullSort());
+        AbstractHit[] aaas = searcher.search(new Term("gender"), new NullSort());
         System.out.println(Arrays.toString(aaas));
     }
 }
