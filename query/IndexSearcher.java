@@ -29,19 +29,7 @@ public class IndexSearcher {
         this.index = index;
     }
 
-    /**
-     * 多个检索词的逻辑组合
-     */
-    public static enum LogicalCombination{
-        /**
-         * 与,即多个检索词必须都在命中文档里出现
-         */
-        ADN,
-        /**
-         * 或, 即任意一个检索词在命中文档里出现
-         */
-        OR
-    }
+
     /**
      * 从指定索引文件打开索引，加载到index对象里. 一定要先打开索引，才能执行search方法
      *
@@ -87,7 +75,7 @@ public class IndexSearcher {
                             .collect(Collectors.toSet());
                 }).orElse(new HashSet<>())
                 .stream();
-    };
+    }
 
     private Stream<Hit> mergePosAndTerms(Stream<Posting>posStream,Set<String> queryTerms){
         return posStream
@@ -101,19 +89,28 @@ public class IndexSearcher {
 
 
     public AbstractHit[] search(List<Set<String>>queryTermsList, Sort sorter){
-        Map<Integer, List<AbstractHit>> collect = queryTermsList.stream()
+        Map<Integer, AbstractHit> collect = queryTermsList.stream()
                 .flatMap(queryTerms ->
                         mergePosAndTerms(searchPositions(queryTerms), queryTerms)
-                ).collect(Collectors.groupingBy(AbstractHit::getDocId));
-        List<AbstractHit> result = new ArrayList<>();
-        collect.forEach((key,value)->{
-            value.stream().reduce((l1, l2) -> {
-                l1.getTermPostingMapping().putAll(l2.getTermPostingMapping());
-                return l1;
-            }).ifPresent(result::add);
-        });
-        sorter.sort(result);
-        return result.toArray(new AbstractHit[1]);
+                ).collect(Collectors.toMap(
+                        AbstractHit::getDocId,
+                        Function.<AbstractHit>identity(),
+                        (t1, t2) -> {
+                    t1.getTermPostingMapping().putAll(t2.getTermPostingMapping());
+                    return t1;
+                }));
+
+        /*        Map<Integer, AbstractHit> collect = queryTermsList.stream()
+                .flatMap(queryTerms ->
+                        mergePosAndTerms(searchPositions(queryTerms), queryTerms)
+                ).collect(Collectors.groupingBy(AbstractHit::getDocId
+                ,Collectors.collectingAndThen(
+                        Collectors.reducing((t1,t2)->{
+                            t1.getTermPostingMapping().putAll(t2.getTermPostingMapping());
+                            return t1;}),Optional::get)));
+       */
+        Collection<AbstractHit> values = collect.values();
+        return values.toArray(new AbstractHit[1]);
     }
 
 }
