@@ -114,10 +114,10 @@ public class Index implements Serializable{
      * 返回指定单词的PostingList
      *
      * @param term : 指定的单词
-     * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回null
+     * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回空集合
      */
     public Set<Posting> search(String term) {
-        return termToPostingListMapping.get(term);
+        return termToPostingListMapping.getOrDefault(term,new HashSet<>());
     }
 
     /**

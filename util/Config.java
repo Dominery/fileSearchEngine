@@ -1,5 +1,8 @@
 package hust.cs.javacourse.search.util;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * <pre>
  *
@@ -73,4 +76,6 @@ public class Config {
      * </pre>
      */
     public static int TERM_FILTER_MAXLENGTH = 20;
+
+    public static List<String> ACCEPT_EXTENSION = Arrays.asList("txt","cpp","java","py","doc");
 }

@@ -1,5 +1,7 @@
 package hust.cs.javacourse.search.index;
 
+import hust.cs.javacourse.search.util.Config;
+
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 
@@ -40,10 +42,16 @@ public class IndexBuilder {
             if (file.isDirectory()) {
                 index.addIndex(buildIndex(file));
             }else{
+                if(isPermittedFile(file))
                 index.addDocument(docBuilder.build(docId++,file.getAbsolutePath(),file));
             }
         }
         return index;
+    }
+
+    public boolean isPermittedFile(File file){
+        String[] split = file.getName().split("\\.");
+        return Config.ACCEPT_EXTENSION.contains(split[split.length-1]);
     }
 
 }

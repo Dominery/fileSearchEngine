@@ -4,13 +4,11 @@ import hust.cs.javacourse.search.index.DocumentBuilder;
 import hust.cs.javacourse.search.index.Index;
 import hust.cs.javacourse.search.index.IndexBuilder;
 import hust.cs.javacourse.search.parse.FilterFactory;
-import hust.cs.javacourse.search.query.Hit;
 import hust.cs.javacourse.search.query.IndexSearcher;
 import hust.cs.javacourse.search.query.ScoreCalculator;
 import hust.cs.javacourse.search.query.impl.NullCalculator;
 
-import javax.sound.midi.Soundbank;
-import java.awt.*;
+
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -85,7 +83,6 @@ public class Display {
             String s = scanner.nextLine();
             Runnable runnable = command.get(s.trim());
             if(runnable!=null)runnable.run();
-            scanner.nextLine();
         }
     }
 

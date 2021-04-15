@@ -22,7 +22,7 @@ public class TestSearchIndex {
         HashSet<String> strings = new HashSet<>();
         strings.add("email");
         strings.add("possible");
-        strings.add("google");
+        strings.add("aaa");
         HashSet<String> strings1 = new HashSet<>();
         strings1.add("google");
         strings1.add("announced");
