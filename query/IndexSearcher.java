@@ -40,11 +40,12 @@ public class IndexSearcher {
     * 如果这些Posting数量与Terms的数量相同，那么这些Posting即为所求。
     * */
 
-    private Stream<Hit> tranform(Set<String>queryTerms){
+    private Stream<Hit> transform(Set<String>queryTerms){
         Map<Integer, List<TermPosPair>> docPoses = queryTerms.stream()
                 .flatMap(term->
                     index.search(term)
-                            .stream()
+                            .map(Set::stream)
+                            .orElseGet(Stream::empty)
                             .map(pos-> new TermPosPair(term, pos))
                     )
                 .collect(Collectors.groupingBy(TermPosPair::getDocId));
@@ -63,7 +64,7 @@ public class IndexSearcher {
 
     public Hit[] search(List<Set<String>>queryTermsList, ScoreCalculator sorter){
         Map<Integer, Hit> collect = queryTermsList.stream()
-                .flatMap(this::tranform)
+                .flatMap(this::transform)
                 .collect(Collectors.toMap(
                         Hit::getDocId,
                         Function.identity(),(h1,h2)->

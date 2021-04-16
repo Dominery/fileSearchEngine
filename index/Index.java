@@ -116,8 +116,8 @@ public class Index implements Serializable{
      * @param term : 指定的单词
      * @return ：指定单词的PostingList;如果索引字典没有该单词，则返回空集合
      */
-    public Set<Posting> search(String term) {
-        return termToPostingListMapping.getOrDefault(term,new HashSet<>());
+    public Optional<Set<Posting>> search(String term) {
+        return Optional.ofNullable(termToPostingListMapping.get(term));
     }
 
     /**
