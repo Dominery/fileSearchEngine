@@ -10,6 +10,9 @@ import hust.cs.javacourse.search.query.impl.NullCalculator;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,10 +57,16 @@ public class Display {
                                     .collect(Collectors.toSet()))
                             .distinct()
                             .collect(Collectors.toList());
-            Arrays.stream(searcher.search(queryTermsList, calculator))
+            searcher.search(queryTermsList, calculator)
                     .forEach(hit -> {
                         System.out.println("file path:"+hit.getDocPath());
-                        System.out.println("file content:"+hit.getContent());
+                        try {
+                            Files.lines(Paths.get(hit.getDocPath()))
+                                    .filter(s -> s.length()>0)
+                                    .forEach(System.out::println);
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
                         System.out.println("pos:"+hit.getTermPostingMapping());
                     });
         });

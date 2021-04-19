@@ -20,13 +20,13 @@ public class TestSearchIndex {
         IndexSearcher searcher = new IndexSearcher();
         searcher.open(Config.INDEX_DIR+"index.bat");
         HashSet<String> strings = new HashSet<>();
-        strings.add("email");
-        strings.add("possible");
-        strings.add("aaa");
+        strings.add("gender");
+        strings.add("recognition");
+        strings.add("simply");
         HashSet<String> strings1 = new HashSet<>();
         strings1.add("google");
         strings1.add("announced");
-        Hit[] search = searcher.search(Arrays.asList(strings1,strings), new NullCalculator());
-        System.out.println(Arrays.toString(search));
+        searcher.search(Arrays.asList(strings1,strings), new NullCalculator())
+                .forEach(System.out::println);
     }
 }

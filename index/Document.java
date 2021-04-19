@@ -1,6 +1,7 @@
 package hust.cs.javacourse.search.index;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *<pre>
@@ -48,8 +49,8 @@ public class Document {
         this.docPath = docPath;
     }
 
-    public List<TermTuple> getTuples() {
-        return tuples;
+    public Stream<TermTuple> getTuples() {
+        return tuples.stream();
     }
 
     public void setTuples(List<TermTuple> tuples) {

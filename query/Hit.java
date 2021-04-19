@@ -1,7 +1,6 @@
 package hust.cs.javacourse.search.query;
 
 import hust.cs.javacourse.search.index.Posting;
-import hust.cs.javacourse.search.util.FileUtil;
 
 import java.util.Map;
 import java.util.Objects;
@@ -22,10 +21,6 @@ public class Hit implements Comparable<Hit>{
      * 文档绝对路径
      */
     protected String docPath;
-    /**
-     * 文档原文内容，显示搜索结果时有用
-     */
-    protected String content;
     /**
      * 命中的单词和对应的Posting键值对，对计算文档得分有用，对于一个查询命中结果，一个term对应的是Posting而不是PostingList
      */
@@ -51,7 +46,6 @@ public class Hit implements Comparable<Hit>{
     public Hit(int docId, String docPath){
         this.docId = docId;
         this.docPath = docPath;
-        this.content = FileUtil.read(docPath);
     }
 
     /**
@@ -64,7 +58,6 @@ public class Hit implements Comparable<Hit>{
         this.docId = docId;
         this.docPath = docPath;
         this.termPostingMapping.putAll(termPostingMapping);
-        this.content = FileUtil.read(docPath);
     }
 
     public int getDocId() {
@@ -83,13 +76,6 @@ public class Hit implements Comparable<Hit>{
         this.docPath = docPath;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public Map<String, Posting> getTermPostingMapping() {
         return termPostingMapping;
@@ -105,8 +91,7 @@ public class Hit implements Comparable<Hit>{
         return "Hit{"+
                 "docId="+docId+
                 ",docPath='"+docPath+"'"+
-                ",content=" +getContent()
-                +",pos="+getTermPostingMapping()+
+                ",pos="+getTermPostingMapping()+
                 "}";
     }
 

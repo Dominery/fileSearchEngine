@@ -42,8 +42,7 @@ public class Index implements Serializable{
      */
     public void addDocument(Document document) {
         docIdToDocPathMapping.put(document.getDocId(),document.getDocPath());
-        List<TermTuple> tuples = document.getTuples();
-        Map<String, List<Integer>> collect = tuples.stream()
+        Map<String, List<Integer>> collect = document.getTuples()
                 .collect(Collectors.groupingBy(
                         absTermTuple -> absTermTuple.term,
                         Collectors.mapping(absTermTuple -> absTermTuple.curPos,
