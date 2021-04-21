@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * <pre>
- * AbstractTermTuple是所有TermTuple对象的抽象父类.
+ *
  *      一个TermTuple对象为三元组(单词，出现频率，出现的当前位置).
  *      当解析一个文档时，每解析到一个单词，应该产生一个三元组，其中freq始终为1(因为单词出现了一次).
  * </pre>

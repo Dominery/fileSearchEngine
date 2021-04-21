@@ -50,13 +50,9 @@ public class Index implements Serializable{
                 ));
         collect.forEach((term,list)->{
             Posting posting = new Posting(document.getDocId(),list.size(),list);
-            Set<Posting> l = termToPostingListMapping.get(term);
-            if(l!=null) l.add(posting);
-            else{
-                Set<Posting> newPostList = new HashSet<>();
-                newPostList.add(posting);
-                termToPostingListMapping.put(term,newPostList);
-            }
+            termToPostingListMapping
+                    .computeIfAbsent(term,t->new HashSet<>())
+                    .add(posting);
         });
     }
 
