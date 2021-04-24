@@ -19,7 +19,7 @@ public class IndexSearcher {
     /**
      * 内存中的索引，子类对象被初始化时为空
      */
-    protected Index index = new Index();
+    private Index index = new Index();
 
     public IndexSearcher() {
     }

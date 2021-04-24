@@ -3,7 +3,7 @@ package hust.cs.javacourse.search.index;
 import hust.cs.javacourse.search.util.Config;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <pre>
@@ -20,7 +20,7 @@ public class IndexBuilder {
     /**
      * docId计数器，每当解析一个文档并写入索引，计数器应该+1
      */
-    protected int docId = 0;
+    protected AtomicInteger docId = new AtomicInteger(0);
 
     public IndexBuilder(DocumentBuilder docBuilder){
         this.docBuilder = docBuilder;
@@ -43,7 +43,7 @@ public class IndexBuilder {
                 index.addIndex(buildIndex(file));
             }else{
                 if(isPermittedFile(file))
-                index.addDocument(docBuilder.build(docId++,file.getAbsolutePath(),file));
+                index.addDocument(docBuilder.build(docId.getAndIncrement(),file.getAbsolutePath(),file));
             }
         }
         return index;

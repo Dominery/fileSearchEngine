@@ -12,11 +12,17 @@ import java.util.function.Predicate;
  */
 public class FilterFactory {
     private final static Map<String,Predicate<String>> filterMap=new HashMap<>();
+    public final static Map<String,String> filterChars = new HashMap<>();
     static {
         filterMap.put("l",word -> word.length()>= Config.TERM_FILTER_MINLENGTH);
         filterMap.put("g",word -> word.length() <= Config.TERM_FILTER_MAXLENGTH);
         filterMap.put("s",word -> !Arrays.asList(StopWords.STOP_WORDS).contains(word));
         filterMap.put("e",word -> word.matches(Config.TERM_FILTER_PATTERN));
+
+        filterChars.put("l","Min Length");
+        filterChars.put("g","Max Length");
+        filterChars.put("s","Stop Words");
+        filterChars.put("e","English only");
     }
 
     public static Predicate<String> create(List<String> choices){
