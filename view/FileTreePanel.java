@@ -1,8 +1,6 @@
 package hust.cs.javacourse.search.view;
 
 import hust.cs.javacourse.search.index.DocumentBuilder;
-import hust.cs.javacourse.search.index.Index;
-import hust.cs.javacourse.search.index.IndexBuilder;
 import hust.cs.javacourse.search.query.Hit;
 import hust.cs.javacourse.search.query.IndexSearcher;
 import hust.cs.javacourse.search.query.ScoreCalculator;
@@ -16,8 +14,11 @@ import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,6 +66,7 @@ public class FileTreePanel extends JPanel {
                 System.out.println(node);
             }
         });
+        filter(jTree);
         JScrollPane jScrollPane = new JScrollPane(jTree);
         jScrollPane.setPreferredSize(new Dimension(180,500));
         add(jScrollPane);
@@ -74,6 +76,36 @@ public class FileTreePanel extends JPanel {
         return new FileWalker<>(DefaultMutableTreeNode::add,(node,file)->
                 node.add(new DefaultMutableTreeNode(new FileNode(file))))
                 .walk(rootFile,file -> new DefaultMutableTreeNode(new FileNode(file)));
+    }
+
+    private void traverse(DefaultMutableTreeNode root,
+                          Predicate<DefaultMutableTreeNode> pick,
+                          Consumer<DefaultMutableTreeNode> process){
+        Enumeration e = root.depthFirstEnumeration();
+        while (e.hasMoreElements()){
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+            if(pick.test(node)){
+                process.accept(node);
+            }
+        }
+    }
+
+    private void filter(JTree jTree){
+        DefaultTreeModel model = (DefaultTreeModel) jTree.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        final boolean[] running = {true}; // if the result of filter is true, make running true
+        Predicate<DefaultMutableTreeNode> filter = n->n.isLeaf()&&!((FileNode)n.getUserObject()).isFile();
+        Consumer<DefaultMutableTreeNode> process = node->{
+            traverse(root,
+                    filter,
+                    model::removeNodeFromParent);
+            running[0] = true;
+        };
+
+        while (running[0]){
+            running[0] = false;
+            traverse(root,filter,process);
+        }
     }
 
     private static class FileNode{
@@ -90,6 +122,10 @@ public class FileTreePanel extends JPanel {
         @Override
         public String toString() {
             return file.getName();
+        }
+
+        public boolean isFile(){
+            return file.isFile();
         }
     }
 }
