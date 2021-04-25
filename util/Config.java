@@ -77,5 +77,5 @@ public class Config {
      */
     public static int TERM_FILTER_MAXLENGTH = 20;
 
-    public static List<String> ACCEPT_EXTENSION = Arrays.asList("txt","cpp","java","py","doc");
+    public static List<String> ACCEPT_EXTENSION = Arrays.asList("txt","cpp","java","py","doc","md");
 }

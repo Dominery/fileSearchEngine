@@ -1,6 +1,7 @@
 package hust.cs.javacourse.search.index;
 
 import hust.cs.javacourse.search.util.Config;
+import hust.cs.javacourse.search.util.FileWalker;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,18 +36,10 @@ public class IndexBuilder {
      * </pre>
      */
     public Index buildIndex(File rootFile) {
-        Index index = new Index();
-        File[] files = rootFile.listFiles();
-        if(files==null)return index;
-        for(File file:files){
-            if (file.isDirectory()) {
-                index.addIndex(buildIndex(file));
-            }else{
-                if(isPermittedFile(file))
-                index.addDocument(docBuilder.build(docId.getAndIncrement(),file.getAbsolutePath(),file));
-            }
-        }
-        return index;
+        return new FileWalker<>(Index::addIndex,(index,file)->
+                index.addDocument(docBuilder.build(docId.getAndIncrement(),
+                        file.getAbsolutePath(),
+                        file))).walk(rootFile,file -> new Index());
     }
 
     public boolean isPermittedFile(File file){
