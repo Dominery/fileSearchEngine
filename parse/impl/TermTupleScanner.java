@@ -31,18 +31,16 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
             cache.clear();
             String s = null;
             try {
-                s = input.readLine();
+                do{
+                    s = input.readLine();
+                }while (s!=null&&s.length()==0); // if line is blank but not the last continue
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
             index = 0;
             if(s==null) {
                 return null;
-            }
-            else if(s.length()==0){
-                return next();
-            }
-            else {
+            } else {
                 Matcher matcher = regex.matcher(s);
                 while (matcher.find()){
                     cache.add(matcher.group(1));

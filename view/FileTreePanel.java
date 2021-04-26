@@ -1,6 +1,5 @@
 package hust.cs.javacourse.search.view;
 
-import hust.cs.javacourse.search.index.DocumentBuilder;
 import hust.cs.javacourse.search.query.Hit;
 import hust.cs.javacourse.search.query.IndexSearcher;
 import hust.cs.javacourse.search.query.ScoreCalculator;
@@ -9,6 +8,7 @@ import hust.cs.javacourse.search.util.FileWalker;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.io.File;
@@ -31,7 +31,7 @@ public class FileTreePanel extends JPanel {
     private ScoreCalculator calculator = new NullCalculator();
 //    private final IndexBuilder indexBuilder;
 
-    public FileTreePanel(DocumentBuilder builder){
+    public FileTreePanel(Dimension dimension){
         super();
 //        indexBuilder = new IndexBuilder(builder);
     }
@@ -67,8 +67,12 @@ public class FileTreePanel extends JPanel {
             }
         });
         filter(jTree);
+        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+        renderer.setLeafIcon(new ScaledImageIcon("images/file_icon.png").scale(15,15));
+        renderer.setClosedIcon(new ScaledImageIcon("images/dir_close_icon.png").scale(15,20));
+        renderer.setOpenIcon(new ScaledImageIcon("images/dir_open_icon.png").scale(16,20));
+        jTree.setCellRenderer(renderer);
         JScrollPane jScrollPane = new JScrollPane(jTree);
-        jScrollPane.setPreferredSize(new Dimension(180,500));
         add(jScrollPane);
     }
 
@@ -127,5 +131,45 @@ public class FileTreePanel extends JPanel {
         public boolean isFile(){
             return file.isFile();
         }
+    }
+}
+
+
+
+class ScaledImageIcon{
+    private final ImageIcon image;
+    ScaledImageIcon(String path){
+        this(new ImageIcon(path));
+    }
+    ScaledImageIcon(ImageIcon imageIcon){
+        image = imageIcon;
+    }
+
+    Image getImage() {
+        return image.getImage();
+    }
+    ImageIcon scale(int width,int height){
+        return new ImageIcon(getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
+    }
+
+    ImageIcon contain(int width,int height){
+        return sizing(width,height,((picRate, boxRate) -> picRate>boxRate));
+    }
+    ImageIcon cover(int width,int height){
+        return sizing(width,height,((picRate, boxRate) -> picRate<boxRate));
+    }
+
+    private ImageIcon sizing(int width,int height,BiIntPredicted predicted){
+        if(predicted.test(image.getIconWidth()*height,image.getIconHeight()*width)){
+            int newHeight = width*image.getIconHeight()/image.getIconWidth();
+            return scale(width,newHeight);
+        }else{
+            int newWidth = height* image.getIconWidth()/image.getIconHeight();
+            return scale(newWidth,height);
+        }
+    }
+    @FunctionalInterface
+    private interface BiIntPredicted{
+        boolean test(int picRate,int boxRate);
     }
 }

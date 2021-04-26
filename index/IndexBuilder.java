@@ -42,9 +42,4 @@ public class IndexBuilder {
                         file))).walk(rootFile,file -> new Index());
     }
 
-    public boolean isPermittedFile(File file){
-        String[] split = file.getName().split("\\.");
-        return Config.ACCEPT_EXTENSION.contains(split[split.length-1]);
-    }
-
 }
