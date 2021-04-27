@@ -45,3 +45,6 @@ public class FileWalker<R> {
         return Config.ACCEPT_EXTENSION.contains(split[split.length-1]);
     }
 }
+
+
+

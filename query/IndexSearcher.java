@@ -2,6 +2,7 @@ package hust.cs.javacourse.search.query;
 
 import hust.cs.javacourse.search.index.Index;
 import hust.cs.javacourse.search.index.Posting;
+import hust.cs.javacourse.search.query.impl.NullCalculator;
 
 import java.io.File;
 import java.util.*;
@@ -81,6 +82,18 @@ public class IndexSearcher {
                 .stream()
                 .peek(hit -> hit.setScore(sorter.calculate(hit)))
                 .sorted(Comparator.comparingDouble(Hit::getScore));
+    }
+
+    public Stream<Hit> search(String queries){
+        List<Set<String>> queryTermsList =
+                Arrays.stream(queries.split("\\|"))
+                        .map(s -> s.trim().split("&"))
+                        .map(array -> Arrays.stream(array)
+                                .map(String::trim)
+                                .collect(Collectors.toSet()))
+                        .distinct()
+                        .collect(Collectors.toList());
+        return search(queryTermsList,new NullCalculator());
     }
 
     public void setIndex(Index index) {
