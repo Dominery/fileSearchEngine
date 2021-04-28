@@ -20,14 +20,24 @@ public class Index implements Serializable{
      * 内存中的docId和docPath的映射关系, key为docId，value为对应的docPath.
      *      TreeMap可以对键值排序
      */
-    protected Map<Integer, String> docIdToDocPathMapping = new TreeMap<>();
+    private Map<Integer, String> docIdToDocPathMapping = new TreeMap<>();
+
+    private File rootPath;
 
     /**
      * 内存中的倒排索引结构为HashMap，key为Term对象，value为对应的Set<Posting>对象.
      */
-    protected Map<String, Set<Posting>> termToPostingListMapping = new HashMap<>();
+    private Map<String, Set<Posting>> termToPostingListMapping = new HashMap<>();
 
     private static final long serialVersionUID = 667750L;
+
+    public Index(File rootPath) {
+        this.rootPath = rootPath;
+    }
+
+    public Index() {
+    }
+
     @Override
     public String toString() {
         return "Index{"+
@@ -59,6 +69,9 @@ public class Index implements Serializable{
     public void addIndex(Index index){
         docIdToDocPathMapping.putAll(index.docIdToDocPathMapping);
         termToPostingListMapping.putAll(index.termToPostingListMapping);
+    }
+    public File getRootPath(){
+        return rootPath;
     }
 
     /**
@@ -159,6 +172,7 @@ public class Index implements Serializable{
             Index pre = (Index) in.readObject();
             termToPostingListMapping = pre.termToPostingListMapping;
             docIdToDocPathMapping = pre.docIdToDocPathMapping;
+            rootPath = pre.rootPath;
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
         }

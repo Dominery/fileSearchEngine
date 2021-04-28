@@ -39,7 +39,7 @@ public class IndexBuilder {
         return new FileWalker<>(Index::addIndex,(index,file)->
                 index.addDocument(docBuilder.build(docId.getAndIncrement(),
                         file.getAbsolutePath(),
-                        file))).walk(rootFile,file -> new Index());
+                        file))).walk(rootFile,file -> new Index(rootFile));
     }
 
 }

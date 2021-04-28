@@ -1,5 +1,6 @@
 package hust.cs.javacourse.search.view;
 
+import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import hust.cs.javacourse.search.query.Hit;
 
 import javax.swing.*;
@@ -18,15 +19,25 @@ import java.util.stream.Collectors;
  * @author suyu
  * @create 2021-04-24-12:05
  */
-public class ContentPanel extends JPanel {
-    private JTextPane textPane=new JTextPane();
+public class ContentPanel{
+    private final JTextPane textPane;
     public ContentPanel(){
-        super();
+        textPane = new JTextPane();
+        textPane.setEditable(false);
+        textPane.setOpaque(false);
+    }
+    public JScrollPane getComponent(){
         JScrollPane scrollPane = new JScrollPane(textPane);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-        textPane.setEditable(false);
-        setOpaque(false);
+        return scrollPane;
+    }
+    public void setContent(Object o) throws IOException{
+        if(o instanceof File){
+            setContent((File)o);
+        }else if(o instanceof Hit){
+            setContent((Hit)o);
+        }
     }
     public void setContent(File file)throws IOException{
         Files.lines(file.toPath()).forEach(line->{
@@ -53,7 +64,7 @@ public class ContentPanel extends JPanel {
                 int i = line.indexOf(word);
                 String substring = line.substring(index, i);
                 insertText(substring,Color.BLACK);
-                insertText(word,Color.PINK);
+                insertText(word,Color.RED);
                 index = i+word.length();
             }
             insertText("\n",Color.BLACK);
@@ -63,7 +74,7 @@ public class ContentPanel extends JPanel {
     public void insertText(String text, Color textColor){
         SimpleAttributeSet simpleAttributeSet = new SimpleAttributeSet();
         StyleConstants.setForeground(simpleAttributeSet, textColor);
-        StyleConstants.setFontSize(simpleAttributeSet, 14);
+        StyleConstants.setFontSize(simpleAttributeSet, 18);
         StyledDocument doc = textPane.getStyledDocument();
         try{
             doc.insertString(doc.getLength(),text,simpleAttributeSet);

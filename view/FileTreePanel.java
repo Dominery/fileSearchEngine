@@ -19,11 +19,11 @@ import java.util.function.Predicate;
  * @create 2021-04-24-13:53
  */
 public class FileTreePanel extends JPanel {
-    private  Optional<DefaultTreeModel> model=Optional.empty();
+    private final DefaultTreeModel model;
     private DefaultMutableTreeNode root;
-    private  Optional<JTree> tree=Optional.empty();
-    private final DefaultTreeCellRenderer renderer;
-    private final Consumer<File> listener;
+    private final JTree tree;
+    private final Consumer<Object> listener;
+    private final JLabel label=new JLabel();
 
     /**
      * Creates a new <code>JPanel</code> with a double buffer
@@ -33,57 +33,64 @@ public class FileTreePanel extends JPanel {
         this(null);
     }
 
-    public FileTreePanel(Consumer<File>listener){
+    public FileTreePanel(Consumer<Object>listener){
         super();
         this.listener = listener;
-        renderer = new DefaultTreeCellRenderer();
+        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
         renderer.setLeafIcon(new ImageIconSizer("images/file_icon.png").scale(15,15));
         renderer.setClosedIcon(new ImageIconSizer("images/dir_close_icon.png").scale(15,20));
         renderer.setOpenIcon(new ImageIconSizer("images/dir_open_icon.png").scale(16,20));
+        tree = new JTree();
+        model = (DefaultTreeModel) tree.getModel();
+        tree.setCellRenderer(renderer);
+        tree.setOpaque(false);
+        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        JScrollPane treeScroll = new JScrollPane(tree);
+        treeScroll.setOpaque(false);
+        treeScroll.getViewport().setOpaque(false);
+        add(treeScroll);
+        label.setOpaque(false);
+        JScrollPane scrollPane = new JScrollPane(label);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        add(scrollPane);
     }
 
 
     public void setUp(File rootPath){
         root = buildTree(rootPath);
-        model.orElseGet(()-> {
-            DefaultTreeModel m = new DefaultTreeModel(root);
-            model = Optional.of(m);
-            return m;
-        }).setRoot(root);
-        model.ifPresent(m-> {
-            tree.orElseGet(() -> { // if it's the first time
-                JTree jTree = new JTree(m);
-                jTree.setCellRenderer(renderer);
-                add(new JScrollPane(jTree));
-                tree = Optional.of(jTree);
-                return jTree;
-            }).setModel(m);
-        });
-        tree.ifPresent(t->t.addTreeSelectionListener(tsl->{
-            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) t.getLastSelectedPathComponent();
+        model.setRoot(root);
+        tree.setModel(model);
+        tree.addTreeSelectionListener(tsl->{
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
             if(selectedNode==null)return;
             Object obj = selectedNode.getUserObject();
             if(selectedNode.isLeaf()){
                 FileNode node = (FileNode)obj;
-                listener.accept(node.file);
-                System.out.println("hh");
+                if(node.getHit().isPresent())listener.accept(node.getHit().get());
+                else listener.accept(node.file);
             }
-        }));
+        });
         filter();
     }
 
     public void pickNode(Hit[] documents){
+        final StringBuffer buffer = new StringBuffer();
         Arrays.stream(documents).forEach(hit -> {
             traverse(node->{
                 FileNode fileNode = (FileNode) node.getUserObject();
                 return fileNode.getFile().getAbsolutePath().equals(hit.getDocPath());
             },node->{
-                ((FileNode) node.getUserObject()).setHit(hit);
-                tree.orElseThrow(()->new RuntimeException("tree not exits"))
-                        .makeVisible(new TreePath(model.orElseThrow(()->new RuntimeException("tree model not exits"))
-                                .getPathToRoot(node)));
+                FileNode n = (FileNode) node.getUserObject();
+                n.setHit(hit);
+                buffer.append(n).append("<br>");
+                tree.makeVisible(new TreePath(model.getPathToRoot(node)));
             });
         });
+        String info;
+        if(buffer.length()==0)info = "Not Found!";
+        else info = "<html><body>" + buffer.toString()+ "</body></html>";
+        label.setText(info);
     }
 
     private DefaultMutableTreeNode buildTree(File rootFile){
@@ -109,8 +116,7 @@ public class FileTreePanel extends JPanel {
         Consumer<DefaultMutableTreeNode> process = node->{
             traverse(
                     filter,
-                    n->model.orElseThrow(()->new RuntimeException("tree model not exits"))
-                            .removeNodeFromParent(n));
+                    model::removeNodeFromParent);
             running[0] = true;
         };
 

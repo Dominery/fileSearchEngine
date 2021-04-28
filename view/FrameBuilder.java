@@ -46,6 +46,15 @@ public class FrameBuilder {
         panel.setOpaque(false);
         return this;
     }
+    public FrameBuilder add(JPanel panel){
+        frame.add(panel);
+        panel.setOpaque(false);
+        return this;
+    }
+    public FrameBuilder setIcon(String path){
+        frame.setIconImage(new ImageIcon(path).getImage());
+        return this;
+    }
 
     public FrameBuilder setBackgroundImage(String path){
         JLabel background = new JLabel(new ImageIconSizer(path).cover(frame.getWidth(),frame.getHeight()));

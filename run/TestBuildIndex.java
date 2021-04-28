@@ -20,6 +20,6 @@ public class TestBuildIndex {
         IndexBuilder builder = new IndexBuilder(documentBuilder);
         Index index = builder.buildIndex(new File("C:\\Users\\Dominery\\ProgrameProject\\JavaProjects"));
 //        System.out.println(index);
-//        index.save(new File(Config.INDEX_DIR+"index.bat"));
+        index.save(new File(Config.INDEX_DIR+"index.bat"));
     }
 }
