@@ -32,8 +32,8 @@ public class FrameBuilder {
         return this;
     }
 
-    public FrameBuilder add(Component component){
-        frame.add(component);
+    public FrameBuilder add(Component component,Object constrains){
+        frame.add(component,constrains);
         return this;
     }
 

@@ -67,7 +67,7 @@ public class IndexSearcher {
     }
 
 
-    public Stream<Hit> search(List<Set<String>>queryTermsList, ScoreCalculator sorter){
+    public Hit[] search(List<Set<String>>queryTermsList, ScoreCalculator sorter){
         Map<Integer, Hit> collect = queryTermsList.stream()
                 .flatMap(this::transform)
                 .collect(Collectors.toMap(  //如果由或连接的与查询结果有相同Hit，合并它们的Posting
@@ -81,10 +81,11 @@ public class IndexSearcher {
         return collect.values()
                 .stream()
                 .peek(hit -> hit.setScore(sorter.calculate(hit)))
-                .sorted(Comparator.comparingDouble(Hit::getScore));
+                .sorted(Comparator.comparingDouble(Hit::getScore))
+                .toArray(Hit[]::new);
     }
 
-    public Stream<Hit> search(String queries){
+    public Hit[] search(String queries){
         List<Set<String>> queryTermsList =
                 Arrays.stream(queries.split("\\|"))
                         .map(s -> s.trim().split("&"))

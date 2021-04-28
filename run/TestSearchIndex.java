@@ -26,7 +26,7 @@ public class TestSearchIndex {
         HashSet<String> strings1 = new HashSet<>();
         strings1.add("google");
         strings1.add("announced");
-        searcher.search(Arrays.asList(strings1,strings), new NullCalculator())
+        Arrays.stream(searcher.search(Arrays.asList(strings1,strings), new NullCalculator()))
                 .forEach(System.out::println);
     }
 }

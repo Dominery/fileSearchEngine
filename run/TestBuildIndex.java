@@ -18,8 +18,8 @@ public class TestBuildIndex {
     public static void main(String[] args){
         DocumentBuilder documentBuilder = new DocumentBuilder();
         IndexBuilder builder = new IndexBuilder(documentBuilder);
-        Index index = builder.buildIndex(new File(Config.DOC_DIR));
+        Index index = builder.buildIndex(new File("C:\\Users\\Dominery\\ProgrameProject\\JavaProjects"));
 //        System.out.println(index);
-        index.save(new File(Config.INDEX_DIR+"index.bat"));
+//        index.save(new File(Config.INDEX_DIR+"index.bat"));
     }
 }

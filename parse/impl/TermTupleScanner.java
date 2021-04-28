@@ -45,6 +45,7 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
                 while (matcher.find()){
                     cache.add(matcher.group(1));
                 }
+                if(cache.size()==0)return next();
             }
         }
         String word = cache.get(index++);

@@ -23,7 +23,7 @@ public class FileTreePanel extends JPanel {
     private DefaultMutableTreeNode root;
     private  Optional<JTree> tree=Optional.empty();
     private final DefaultTreeCellRenderer renderer;
-    private final Consumer<Hit> listener;
+    private final Consumer<File> listener;
 
     /**
      * Creates a new <code>JPanel</code> with a double buffer
@@ -33,7 +33,7 @@ public class FileTreePanel extends JPanel {
         this(null);
     }
 
-    public FileTreePanel(Consumer<Hit>listener){
+    public FileTreePanel(Consumer<File>listener){
         super();
         this.listener = listener;
         renderer = new DefaultTreeCellRenderer();
@@ -65,7 +65,8 @@ public class FileTreePanel extends JPanel {
             Object obj = selectedNode.getUserObject();
             if(selectedNode.isLeaf()){
                 FileNode node = (FileNode)obj;
-                node.getHit().ifPresent(listener);
+                listener.accept(node.file);
+                System.out.println("hh");
             }
         }));
         filter();

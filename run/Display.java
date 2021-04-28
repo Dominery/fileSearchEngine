@@ -57,7 +57,7 @@ public class Display {
                                     .collect(Collectors.toSet()))
                             .distinct()
                             .collect(Collectors.toList());
-            searcher.search(queryTermsList, calculator)
+            Arrays.stream(searcher.search(queryTermsList, calculator))
                     .forEach(hit -> {
                         System.out.println("file path:"+hit.getDocPath());
                         try {
