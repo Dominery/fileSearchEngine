@@ -22,11 +22,11 @@ public class SearchFrame extends JFrame {
                                     .build();
     public SearchFrame(){
         super("File Search");
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(screenSize.width / 2, screenSize.height / 2);
@@ -45,7 +45,7 @@ public class SearchFrame extends JFrame {
         treePanel.setUp(new File("C:\\Users\\Dominery\\Documents\\笔记\\java"));
         add(treePanel,BorderLayout.WEST);
         setBackgroundImage("images/little_prince.png");
-        JMenuBar build = MenuBarBuilder.mainMenu("File").addMenuItem("build", e -> {
+        JMenuBar build = MenuBarBuilder.mainMenu("File").addMenuItem(new ImageIconSizer("images/build.png").scale(16,16),"build", e -> {
             int i = buildChooser.showOpenDialog(this);
             if (i == JFileChooser.APPROVE_OPTION) {
                 treePanel.setUp(buildChooser.getSelectedFile());

@@ -1,7 +1,5 @@
 package hust.cs.javacourse.search.view;
 
-import hust.cs.javacourse.search.query.IndexSearcher;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
