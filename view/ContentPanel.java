@@ -6,12 +6,15 @@ import hust.cs.javacourse.search.query.Hit;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,10 +24,33 @@ import java.util.stream.Collectors;
  */
 public class ContentPanel{
     private final JTextPane textPane;
+    private Optional<Path> file =Optional.empty();
     public ContentPanel(){
         textPane = new JTextPane();
-        textPane.setEditable(false);
+//        textPane.setEditable(false);
         textPane.setOpaque(false);
+        JPopupMenu popMenu = new JPopupMenu();
+        JMenuItem save = new JMenuItem("save");
+        save.addActionListener(e->{
+            file.ifPresent(path->{
+                try {
+                    Files.write(path,textPane.getText().getBytes());
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            });
+        });
+        popMenu.add(save);
+        textPane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+
+                    popMenu.show(textPane, e.getX(), e.getY());
+
+                }
+            }
+        });
     }
     public JScrollPane getComponent(){
         JScrollPane scrollPane = new JScrollPane(textPane);
@@ -34,8 +60,11 @@ public class ContentPanel{
     }
     public void setContent(Object o) throws IOException{
         if(o instanceof File){
-            setContent((File)o);
+            File f = (File)o;
+            file = Optional.of(f.toPath());
+            setContent(f);
         }else if(o instanceof Hit){
+            file = Optional.of(Paths.get(((Hit)o).getDocPath()));
             setContent((Hit)o);
         }
     }

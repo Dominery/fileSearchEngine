@@ -67,7 +67,7 @@ public class FileTreePanel extends JPanel {
             Object obj = selectedNode.getUserObject();
             if(selectedNode.isLeaf()){
                 FileNode node = (FileNode)obj;
-                if(node.getHit().isPresent())listener.accept(node.getHit().get());
+                if(node.getHit()!=null)listener.accept(node.getHit());
                 else listener.accept(node.file);
             }
         });
@@ -75,6 +75,7 @@ public class FileTreePanel extends JPanel {
     }
 
     public void pickNode(Hit[] documents){
+        traverse(node->true,node->((FileNode)node.getUserObject()).setHit(null));
         final StringBuffer buffer = new StringBuffer();
         Arrays.stream(documents).forEach(hit -> {
             traverse(node->{
@@ -128,16 +129,15 @@ public class FileTreePanel extends JPanel {
 
     private static class FileNode{
         private final File file;
-        private Optional<Hit> hit;
+        private Hit hit;
 
         public FileNode(File file) {
             this.file = file;
-            hit = Optional.empty();
         }
         public void setHit(Hit hit){
-            this.hit = Optional.ofNullable(hit);
+            this.hit = hit;
         }
-        public Optional<Hit> getHit(){
+        public Hit getHit(){
             return hit;
         }
 
