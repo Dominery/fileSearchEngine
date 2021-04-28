@@ -32,9 +32,8 @@ public class FrameBuilder {
         return this;
     }
 
-    public FrameBuilder add(JPanel panel){
-        frame.add(panel);
-        panel.setOpaque(false);
+    public FrameBuilder add(Component component){
+        frame.add(component);
         return this;
     }
 
@@ -45,6 +44,14 @@ public class FrameBuilder {
     public FrameBuilder add(JPanel panel,Object constrains){
         frame.add(panel,constrains);
         panel.setOpaque(false);
+        return this;
+    }
+
+    public FrameBuilder setBackgroundImage(String path){
+        JLabel background = new JLabel(new ImageIconSizer(path).cover(frame.getWidth(),frame.getHeight()));
+        frame.getLayeredPane().add(background,new Integer(Integer.MIN_VALUE));
+        background.setBounds(0,0,frame.getWidth(),frame.getHeight());
+        ((JPanel)frame.getContentPane()).setOpaque(false);
         return this;
     }
 
