@@ -15,7 +15,7 @@ public class FrameBuilder {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize((int)(screenSize.width*widthRate),(int)(screenSize.height*heightRate));
         frame.setResizable(false);
-        frame.setLocationByPlatform(true);
+        frame.setLocation((screenSize.width-frame.getWidth())/2,(screenSize.height-frame.getHeight())/2);
     }
 
     public static FrameBuilder setSize(double widthRate,double heightRate){

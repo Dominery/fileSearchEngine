@@ -69,15 +69,14 @@ public class SearchFileEngine {
             System.out.println(s);
             indexSearcher.getIndex().save(new File(file.getAbsolutePath()+File.separator+s));
         });
-        treePanel.setUp(new File("C:\\Users\\Dominery\\Documents\\笔记\\java"));
-        JMenuBar menu = MenuBarBuilder.mainMenu("File")
+        JMenuBar menu = MenuBuilder.mainMenu("File",new JMenuBar())
                 .addMenuItem(new ImageIconSizer("images/build.png")
                         .scale(16,16),"build", buildEngine.getListener())
                 .addMenuItem(new ImageIconSizer("images/export.png")
                         .scale(16,16),"load",loadEngine.getListener())
-                .addMenu("System")
                 .addMenuItem(new ImageIconSizer("images/save.png")
                         .scale(16,16),"save",saveEngine.getListener())
+                .addMenu("System")
                 .addMenuItem(new ImageIconSizer("images/back.png")
                         .scale(16,16),"back",e->{mainFrame.setVisible(false);startFrame.setVisible(true);})
                 .addMenuItem(new ImageIconSizer("images/exit.png")
@@ -89,10 +88,12 @@ public class SearchFileEngine {
                 .setIcon("images/file_search.png")
                 .setLayout(new GridBagLayout())
                 .add(treePanel,new GBC(0,0,3,7).setFill(GBC.BOTH).setWeight(0,100))
-                .add(contentPanel.getComponent(),new GBC(3,0,4,5).setFill(GBC.BOTH).setWeight(100,100))
+                .add(contentPanel,new GBC(3,0,4,5).setFill(GBC.BOTH).setWeight(100,100))
                 .add(searchTextPanel, new GBC(3,5,4,2).setAnchor(GBC.CENTER).setWeight(100,0))
                 .setMenuBar(menu)
                 .build();
+        treePanel.setMinimumSize(new Dimension(mainFrame.getWidth()*3/7,Integer.MAX_VALUE));
+        treePanel.setMaximumSize(new Dimension(mainFrame.getWidth()*3/7,Integer.MAX_VALUE));
     }
 
     private void setUpStartFrame(){
@@ -117,7 +118,7 @@ public class SearchFileEngine {
                 .setLayout(new GridBagLayout())
                 .add(build,new GBC(0,0).setAnchor(GBC.EAST).setWeight(0,0))
                 .add(load,new GBC(0,1).setAnchor(GBC.CENTER).setWeight(0,0))
-                .add(filterPanel,new GBC(1,0,1,2).setAnchor(GBC.WEST).setWeight(0,0))
+                .add(filterPanel,new GBC(1,0,4,2).setAnchor(GBC.WEST).setWeight(0,0))
                 .build();
     }
 
