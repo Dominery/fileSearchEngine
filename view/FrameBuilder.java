@@ -1,7 +1,11 @@
 package hust.cs.javacourse.search.view;
 
 import javax.swing.*;
+import javax.swing.plaf.LayerUI;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 /**
  * @author suyu
@@ -32,8 +36,9 @@ public class FrameBuilder {
         return this;
     }
 
-    public FrameBuilder add(Component component,Object constrains){
+    public FrameBuilder add(JComponent component,Object constrains){
         frame.add(component,constrains);
+        component.setOpaque(false);
         return this;
     }
 
@@ -41,14 +46,9 @@ public class FrameBuilder {
         frame.setLayout(manager);
         return this;
     }
-    public FrameBuilder add(JPanel panel,Object constrains){
-        frame.add(panel,constrains);
-        panel.setOpaque(false);
-        return this;
-    }
-    public FrameBuilder add(JPanel panel){
-        frame.add(panel);
-        panel.setOpaque(false);
+    public FrameBuilder add(JComponent component){
+        frame.add(component);
+        component.setOpaque(false);
         return this;
     }
     public FrameBuilder setIcon(String path){
@@ -67,4 +67,6 @@ public class FrameBuilder {
     public JFrame build(){
         return frame;
     }
+
+
 }

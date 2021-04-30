@@ -3,6 +3,7 @@ package hust.cs.javacourse.search.view;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @author suyu
@@ -10,22 +11,13 @@ import java.util.Arrays;
  */
  class MenuBuilder<T extends JComponent>{
     private final T menuBar;
-    private JMenu menu;
-    private MenuBuilder(JMenu menu, T menuType){
+    private JComponent menu;
+    private MenuBuilder(T menuType){
         menuBar = menuType;
-        this.menu = menu;
-        menuBar.add(menu);
+        menu = menuType;
     }
-    public static<T extends JComponent> MenuBuilder<T> mainMenu(String menuName, T menuType){
-        return new MenuBuilder<>(new JMenu(menuName),menuType);
-    }
-    public MenuBuilder<T> addMenuItem(String itemName, ActionListener ...listeners){
-        JMenuItem menuItem = new JMenuItem(itemName);
-        addMenuItem(menuItem,listeners);
-        return this;
-    }
-    public MenuBuilder<T> addMenuItem(ImageIcon icon, ActionListener...listeners){
-        return addMenuItem(new JMenuItem(icon),listeners);
+    public static<T extends JComponent> MenuBuilder<T> menuTye(T menuType){
+        return new MenuBuilder<>(menuType);
     }
     public MenuBuilder<T> addMenuItem(ImageIcon icon, String itemName, ActionListener...listeners){
        return addMenuItem(new JMenuItem(itemName, icon), listeners);

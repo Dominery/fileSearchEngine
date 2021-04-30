@@ -9,6 +9,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
@@ -25,13 +26,6 @@ public class FileTreePanel extends JPanel {
     private final Consumer<Object> listener;
     private final JLabel label=new JLabel();
 
-    /**
-     * Creates a new <code>JPanel</code> with a double buffer
-     * and a flow layout.
-     */
-    public FileTreePanel() {
-        this(null);
-    }
 
     public FileTreePanel(Consumer<Object>listener){
         super();
@@ -48,12 +42,16 @@ public class FileTreePanel extends JPanel {
         JScrollPane treeScroll = new JScrollPane(tree);
         treeScroll.setOpaque(false);
         treeScroll.getViewport().setOpaque(false);
-        add(treeScroll);
+//        add(treeScroll);
         label.setOpaque(false);
         JScrollPane scrollPane = new JScrollPane(label);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-        add(scrollPane);
+//        add(scrollPane);
+//        treeScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treeScroll, label);
+        splitPane.setOpaque(false);
+        add(splitPane);
     }
 
 
@@ -159,7 +157,7 @@ public class FileTreePanel extends JPanel {
 
 
 class ImageIconSizer {
-    private final ImageIcon image;
+    private  ImageIcon image;
     ImageIconSizer(String path){
         this(new ImageIcon(path));
     }
@@ -167,9 +165,10 @@ class ImageIconSizer {
         image = imageIcon;
     }
 
-    Image getImage() {
+    private Image getImage() {
         return image.getImage();
     }
+
     ImageIcon scale(int width,int height){
         return new ImageIcon(getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
     }

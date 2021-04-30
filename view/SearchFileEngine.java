@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -40,7 +41,8 @@ public class SearchFileEngine {
                 .build(), mainFrame);
         setUpMainFrame();
         setUpStartFrame();
-        startFrame.setVisible(true);
+//        startFrame.setVisible(true);
+        mainFrame.setVisible(true);
     }
 
     private void setUpMainFrame(){
@@ -69,7 +71,8 @@ public class SearchFileEngine {
             System.out.println(s);
             indexSearcher.getIndex().save(new File(file.getAbsolutePath()+File.separator+s));
         });
-        JMenuBar menu = MenuBuilder.mainMenu("File",new JMenuBar())
+        JMenuBar menu = MenuBuilder.menuTye(new JMenuBar())
+                .addMenu("File")
                 .addMenuItem(new ImageIconSizer("images/build.png")
                         .scale(16,16),"build", buildEngine.getListener())
                 .addMenuItem(new ImageIconSizer("images/export.png")
@@ -82,18 +85,23 @@ public class SearchFileEngine {
                 .addMenuItem(new ImageIconSizer("images/exit.png")
                         .scale(16,16),"exit",e->System.exit(0)).build();
 
-
+        JSplitPane right = new JSplitPane(JSplitPane.VERTICAL_SPLIT, contentPanel, searchTextPanel);
+        right.setDividerLocation(Integer.MAX_VALUE);
+        right.setOneTouchExpandable(true);
+        JSplitPane whole  =  new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,treePanel,right);
+        Arrays.asList(contentPanel, searchTextPanel, treePanel,right).forEach(c->c.setOpaque(false));
         mainFrame = FrameBuilder.setSize(0.5,0.5)
                 .setBackgroundImage("images/little_prince.png")
                 .setIcon("images/file_search.png")
-                .setLayout(new GridBagLayout())
-                .add(treePanel,new GBC(0,0,3,7).setFill(GBC.BOTH).setWeight(0,100))
-                .add(contentPanel,new GBC(3,0,4,5).setFill(GBC.BOTH).setWeight(100,100))
-                .add(searchTextPanel, new GBC(3,5,4,2).setAnchor(GBC.CENTER).setWeight(100,0))
+//                .setLayout(new GridBagLayout())
+                .add(whole,BorderLayout.CENTER)
+//                .add(treePanel,new GBC(0,0,3,7).setFill(GBC.BOTH).setWeight(0,100))
+//                .add(contentPanel,new GBC(3,0,4,5).setFill(GBC.BOTH).setWeight(100,100))
+//                .add(searchTextPanel, new GBC(3,5,4,2).setAnchor(GBC.CENTER).setWeight(100,0))
                 .setMenuBar(menu)
                 .build();
-        treePanel.setMinimumSize(new Dimension(mainFrame.getWidth()*3/7,Integer.MAX_VALUE));
-        treePanel.setMaximumSize(new Dimension(mainFrame.getWidth()*3/7,Integer.MAX_VALUE));
+//        treePanel.setMinimumSize(new Dimension(mainFrame.getWidth()*3/7,Integer.MAX_VALUE));
+//        treePanel.setMaximumSize(new Dimension(mainFrame.getWidth()*3/7,Integer.MAX_VALUE));
     }
 
     private void setUpStartFrame(){

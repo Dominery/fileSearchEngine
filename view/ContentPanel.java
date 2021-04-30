@@ -117,7 +117,7 @@ public class ContentPanel extends JPanel{
                 splits.add(matcher.group(1));
                 start = matcher.end();
             }
-            splits.add("\n");
+            splits.add(line.substring(start)+"\n");
             splits.stream()
                     .filter(s->s.length()>0)
                     .forEach(word->{
@@ -150,8 +150,7 @@ public class ContentPanel extends JPanel{
             fontStyle = (italic.isSelected()?Font.ITALIC:0)+(bold.isSelected()?Font.BOLD:0);
             update();
         };
-        JPopupMenu popMenu = MenuBuilder.mainMenu("font style", new JPopupMenu())
-                .addMenuItems(action,italic,normal,bold)
+        JPopupMenu popMenu = MenuBuilder.menuTye(new JPopupMenu())
                 .addSingleMenu(new ImageIconSizer("images/save.png").scale(16, 16), "save", e -> {
                     file.ifPresent(path -> {
                         try {
@@ -161,6 +160,8 @@ public class ContentPanel extends JPanel{
                         }
                     });
                 })
+                .addMenu("FontType")
+                .addMenuItems(action,italic,normal,bold)
                 .addSingleMenu(new ImageIconSizer("images/copy.png").scale(16,16),"copy",e->textPane.copy())
                 .addSingleMenu(new ImageIconSizer("images/paste.png").scale(16,16),"paste",e->textPane.paste())
                 .addSingleMenu(new ImageIconSizer("images/cut.png").scale(16,16),"cut",e->textPane.cut()).build();
@@ -180,5 +181,4 @@ public class ContentPanel extends JPanel{
         textPane.setFont(new Font(fontFamily,fontStyle,fontSize));
         textPane.repaint();
     }
-
 }
